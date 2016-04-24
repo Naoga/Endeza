@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Endeza.iml" filepath="$PROJECT_DIR$/Endeza.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gaijuui/gaijuui.iml" filepath="$PROJECT_DIR$/gaijuui/gaijuui.iml" />
     </modules>
   </component>
 </project>
