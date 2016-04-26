@@ -9,14 +9,16 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.app.Application;
+import com.beardedhen.androidbootstrap.TypefaceProvider;
 
-public class GaijuActivity extends AppCompatActivity implements View.OnClickListener{
+public class GaijuActivity extends AppCompatActivity /*implements View.OnClickListener*/{
     //widgetを格納するメンバ変数を定義
-    private EditText mInputMessage;
+    /*private EditText mInputMessage;
     private Button mSendMessage;
     private LinearLayout mMessageLog;
     private TextView mCpuMessage;
-    private TextView mUserMessage;
+    private TextView mUserMessage;*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,17 +26,17 @@ public class GaijuActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_gaiju);
 
         //メンバ変数の初期化
-        mInputMessage=(EditText)findViewById(R.id.input_message);
+        /*mInputMessage=(EditText)findViewById(R.id.input_message);
         mSendMessage=(Button) findViewById(R.id.send_message);
         mMessageLog=(LinearLayout)findViewById(R.id.message_log);
         mCpuMessage=(TextView)findViewById(R.id.cpu_message);
         mUserMessage=(TextView)findViewById(R.id.user_message);
         //ボタンを押したときの処理:リスナはthis
-        mSendMessage.setOnClickListener(this);
+        mSendMessage.setOnClickListener(this);*/
 
     }
 
-    @Override
+    /*@Override
     public void onClick(View v) { //vはどのViewがpushされたかを受け取る
         if(v.equals(mSendMessage)){ //SENDボタンがpushされたときの動作
             String inputText = mInputMessage.getText().toString();
@@ -42,5 +44,5 @@ public class GaijuActivity extends AppCompatActivity implements View.OnClickList
             mCpuMessage.setText("それはいいですね");
             mInputMessage.setText("");
         }
-    }
+    }*/
 }
