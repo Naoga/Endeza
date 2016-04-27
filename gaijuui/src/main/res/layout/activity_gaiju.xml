@@ -4,73 +4,38 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:gravity="center"
     tools:context=".GaijuActivity">
 
-    <TextView android:text="Hello World!"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <com.beardedhen.androidbootstrap.AwesomeTextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        app:bootstrapBrand="success"
-        app:fontAwesomeIcon="fa_android"
-        android:textSize="50dp"
-        />
-
+    <!--設定ボタン
+        Brand:ボタンタイプの変更
+        Size:ボタン内表示文字のサイズ変更 sm/md/lg/xl
+        Text:ボタン内表示文字の設定、{}内はアイコンの表示-->
     <com.beardedhen.androidbootstrap.BootstrapButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="BootstrapButton"
+        android:layout_width="150sp"
+        android:layout_height="70sp"
         app:bootstrapBrand="success"
-        app:bootstrapSize="lg"
+        app:bootstrapSize="xl"
         app:buttonMode="regular"
         app:showOutline="false"
         app:roundedCorners="true"
-        android:layout_margin="10dp"
-        app:bootstrapText="Button  {fa-support} {fa_android}"
-        />
+        android:layout_margin="20dp"
+        app:bootstrapText="データ {fa-bar-chart-o}"
+        android:layout_gravity="bottom|center_horizontal" />
 
-
-    <com.beardedhen.androidbootstrap.BootstrapProgressBar
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        app:animated="true"
-        app:bootstrapBrand="warning"
-        app:progress="78"
-        app:striped="true"
-        />
-
-    <com.beardedhen.androidbootstrap.AwesomeTextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:textSize="30dp"
-        app:bootstrapBrand="success"
-        app:bootstrapText="Text  {fa_heart} {fa_github}"
-        app:fontAwesomeIcon="fa_android"
-        tools:ignore="SpUsage"
-        />
-    <com.beardedhen.androidbootstrap.BootstrapLabel
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <com.beardedhen.androidbootstrap.BootstrapButton
+        android:layout_width="150sp"
+        android:layout_height="70sp"
         app:bootstrapBrand="primary"
-        app:bootstrapHeading="h3"
+        app:bootstrapSize="xl"
+        app:buttonMode="regular"
+        app:showOutline="false"
         app:roundedCorners="true"
-        android:text="Bootstrap Label"
-        android:layout_margin="10dp"
-        />
+        android:layout_margin="20dp"
+        app:bootstrapText="設定 {fa-cog}"
+        android:layout_gravity="left|bottom|center_horizontal"
+        android:textStyle="bold" />
 
-    <com.beardedhen.androidbootstrap.BootstrapEditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:bootstrapSize="md"
-        app:bootstrapBrand="info"
-        android:layout_margin="10dp"
-        />
 
 </LinearLayout>
