@@ -1,14 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--androidbootstrapの設定ファイル(変更の必要なし)-->
+<?xml version="1.0" encoding="utf-8"?><!-- androidbootstrapの設定ファイル(変更の必要なし) -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.study.gaijuui">
 
     <application
+        android:name=".TestBootstrap"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:name=".TestBootstrap"
         android:theme="@style/AppTheme">
         <activity
             android:name=".GaijuActivity"
@@ -20,7 +19,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".DataActivity"></activity>
     </application>
 
 </manifest>
-

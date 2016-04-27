@@ -1,5 +1,6 @@
 package com.study.gaijuui;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
@@ -19,13 +20,10 @@ import com.beardedhen.androidbootstrap.TypefaceProvider;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class GaijuActivity extends AppCompatActivity /*implements View.OnClickListener*/{
+public class GaijuActivity extends AppCompatActivity implements View.OnClickListener{
     //widgetを格納するメンバ変数を定義
-    /*private EditText mInputMessage;
-    private Button mSendMessage;
-    private LinearLayout mMessageLog;
-    private TextView mCpuMessage;
-    private TextView mUserMessage;*/
+    private Button mBut_Data;
+    private Button mBut_Conf;
 
     //OnCreate()内に動作を記述する
     @Override
@@ -54,23 +52,19 @@ public class GaijuActivity extends AppCompatActivity /*implements View.OnClickLi
         }
 
         //メンバ変数の初期化
-        /*mInputMessage=(EditText)findViewById(R.id.input_message);
-        mSendMessage=(Button) findViewById(R.id.send_message);
-        mMessageLog=(LinearLayout)findViewById(R.id.message_log);
-        mCpuMessage=(TextView)findViewById(R.id.cpu_message);
-        mUserMessage=(TextView)findViewById(R.id.user_message);
+        mBut_Data=(Button)findViewById(R.id.but_data);
+        mBut_Conf=(Button) findViewById(R.id.but_conf);
         //ボタンを押したときの処理:リスナはthis
-        mSendMessage.setOnClickListener(this);*/
+        mBut_Data.setOnClickListener(this);
+        //mBut_Conf.setOnClickListener(this);
 
     }
 
-    /*@Override
+    @Override
     public void onClick(View v) { //vはどのViewがpushされたかを受け取る
-        if(v.equals(mSendMessage)){ //SENDボタンがpushされたときの動作
-            String inputText = mInputMessage.getText().toString();
-            mUserMessage.setText(inputText);
-            mCpuMessage.setText("それはいいですね");
-            mInputMessage.setText("");
+        if(v.equals(mBut_Data)){ //データボタンがpushされたときの動作
+            Intent intent = new Intent(this, DataActivity.class);
+            startActivity(intent);
         }
-    }*/
+    }
 }
