@@ -1,3 +1,4 @@
+//Bootstrap用ファイル(変更必要なし)
 package com.study.gaijuui;
 
 /**
