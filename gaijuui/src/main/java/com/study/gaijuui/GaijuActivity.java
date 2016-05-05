@@ -1,6 +1,7 @@
 package com.study.gaijuui;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.app.Application;
+
+import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.TypefaceProvider;
 
 import java.io.IOException;
@@ -22,9 +25,9 @@ import java.io.InputStream;
 
 public class GaijuActivity extends AppCompatActivity implements View.OnClickListener{
     //widgetを格納するメンバ変数を定義
-    private Button mBut_Data;
-    private Button mBut_Conf;
-
+    private BootstrapButton mBut_Data;
+    private BootstrapButton mBut_Conf;
+    //private EditText mTestText ;
     //OnCreate()内に動作を記述する
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,18 +55,28 @@ public class GaijuActivity extends AppCompatActivity implements View.OnClickList
         }
 
         //メンバ変数の初期化
-        mBut_Data=(Button)findViewById(R.id.but_data);
-        mBut_Conf=(Button) findViewById(R.id.but_conf);
-        //ボタンを押したときの処理:リスナはthis
+        mBut_Data= (BootstrapButton) findViewById(R.id.but_data);
+        mBut_Conf=(BootstrapButton) findViewById(R.id.but_conf);
+        //mTestText=(EditText) findViewById(R.id.TestText);
+        //リスナの呼び出しの設定
+        mBut_Conf.setOnClickListener(this);
         mBut_Data.setOnClickListener(this);
-        //mBut_Conf.setOnClickListener(this);
+
 
     }
 
+    //インターフェイスの実装 OnClickListner()
     @Override
-    public void onClick(View v) { //vはどのViewがpushされたかを受け取る
-        if(v.equals(mBut_Data)){ //データボタンがpushされたときの動作
+    public void onClick(View v) { //vはどのViewが押されたかを受け取る
+        if(v.equals(mBut_Data)){ //データボタンが押されたときの動作
+            //mTestText.setText("button push");　buttonデバッグ用
+            //画面遷移用のインテントの生成
             Intent intent = new Intent(this, DataActivity.class);
+            //データ画面へと遷移
+            startActivity(intent);
+        }
+        if(v.equals(mBut_Conf)){//設定ボタンが押されたときの動作
+            Intent intent = new Intent(this,ConfActivity.class);
             startActivity(intent);
         }
     }
