@@ -17,7 +17,9 @@
         android:scaleType="fitCenter"
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:layout_margin="20dp" />
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:baselineAlignBottom="false" />
 
     <!--イノシシ画像のレイアウト/現段階ではイラストの表示-->
     <ImageView
@@ -32,13 +34,15 @@
         Size:ボタン内表示文字のサイズ変更 sm/md/lg/xl
         Text:ボタン内表示文字の設定、{}内はアイコンの表示-->
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="79dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="bottom|center_horizontal"
+        android:weightSum="1">
 
         <com.beardedhen.androidbootstrap.BootstrapButton
-            android:layout_width="140sp"
+            android:layout_width="150sp"
             android:layout_height="wrap_content"
             app:bootstrapBrand="primary"
             app:bootstrapSize="xl"
@@ -46,15 +50,14 @@
             app:showOutline="false"
             app:roundedCorners="true"
             app:bootstrapText="設定 {fa-cog}"
-            android:layout_gravity="center_vertical"
             android:textStyle="bold"
             android:id="@+id/but_conf"
-            android:layout_marginRight="30dp"
-            android:layout_marginEnd="25dp"
             android:layout_alignWithParentIfMissing="false"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            android:layout_weight="0"
+            android:layout_marginRight="25dp" />
 
         <!--データボタンのレイアウト-->
         <com.beardedhen.androidbootstrap.BootstrapButton
@@ -68,13 +71,11 @@
             app:bootstrapText="データ {fa-bar-chart-o}"
             android:layout_gravity="bottom"
             android:id="@+id/but_data"
-            android:layout_marginLeft="45dp"
-            android:layout_marginStart="25dp"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:onClick="onClick"/>
+            android:onClick="onClick" />
 
 
-    </RelativeLayout>
+    </LinearLayout>
 </LinearLayout>

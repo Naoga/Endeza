@@ -47,7 +47,7 @@ public class GaijuActivity extends AppCompatActivity implements View.OnClickList
         //ロゴの出力
         ImageView imageView2 = (ImageView) findViewById(R.id.image_view_2);
         try {
-            InputStream istream = getResources().getAssets().open("logo.png");
+            InputStream istream = getResources().getAssets().open("hatake_logo.png");
             Bitmap bitmap = BitmapFactory.decodeStream(istream);
             imageView2.setImageBitmap(bitmap);
         } catch (IOException e) {
