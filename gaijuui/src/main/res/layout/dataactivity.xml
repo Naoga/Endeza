@@ -8,7 +8,16 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
     tools:context="com.study.gaijuui.DataActivity">
+
+    <com.github.mikephil.charting.charts.BarChart
+        android:id="@+id/bar_chart"
+        android:layout_width="match_parent"
+        android:layout_height="411dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/but_topfromdata" />
 
     <com.beardedhen.androidbootstrap.BootstrapButton
         android:layout_width="wrap_content"
@@ -20,7 +29,9 @@
         app:roundedCorners="true"
         app:bootstrapText="トップにもどる {fa-long-arrow-left}"
         android:onClick="onClick"
-        android:id="@+id/but_topfromdata">
+        android:id="@+id/but_topfromdata"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true">
 
     </com.beardedhen.androidbootstrap.BootstrapButton>
 

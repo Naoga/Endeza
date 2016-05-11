@@ -61,8 +61,6 @@ public class GaijuActivity extends AppCompatActivity implements View.OnClickList
         //リスナの呼び出しの設定
         mBut_Conf.setOnClickListener(this);
         mBut_Data.setOnClickListener(this);
-
-
     }
 
     //インターフェイスの実装 OnClickListner()
