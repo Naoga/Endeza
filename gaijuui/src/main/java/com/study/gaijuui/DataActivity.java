@@ -79,8 +79,8 @@ public class DataActivity extends AppCompatActivity implements View.OnClickListe
         //Y軸の設定
         YAxis yAxis = mBarChart.getAxisLeft();
         yAxis.setTextColor(Color.BLACK);
-        yAxis.setAxisMinValue(0.0f);
-        yAxis.setAxisMaxValue(20.0f);
+        yAxis.setAxisMinValue(0);
+        yAxis.setAxisMaxValue(20);
         yAxis.setDrawGridLines(true);
 
         //データ追加時の再描画
@@ -93,35 +93,24 @@ public class DataActivity extends AppCompatActivity implements View.OnClickListe
 
         //x軸
         ArrayList<String> xValues = new ArrayList<>();
-        /*for(int i=0;i<12;i++){
-            String s=(i+1)+"月";
+        for(int i=0;i<12;i++){
+            //String s=(i+1)+"月";
+            String s="";
             xValues.add(s);
-        }*/
-
-        xValues.add("1月");
-        xValues.add("2月");
-        xValues.add("3月");
-        xValues.add("4月");
-        xValues.add("5月");
+        }
 
         //value(テスト用・静的な値)
         ArrayList<BarEntry> values = new ArrayList<>();
-        /*for(int i=100,j=0;i<1200;i+=100,j++) {
-            values.add(new BarEntry(i,j));
-        }*/
-        values.add(new BarEntry(1, 0));
-        values.add(new BarEntry(2, 1));
-        values.add(new BarEntry(3, 2));
-        values.add(new BarEntry(4, 3));
-        values.add(new BarEntry(5, 4));
+        for(int i=0;i<12;i++) {
+            values.add(new BarEntry(i+1,i));
+        }
 
-
-        BarDataSet valuesDataSet = new BarDataSet(values, "Test");
+        BarDataSet valuesDataSet = new BarDataSet(values,"");
         valuesDataSet.setColor(ColorTemplate.COLORFUL_COLORS[3]);
 
         barDataSets.add(valuesDataSet);
 
-        BarData barData = new BarData(xValues, barDataSets);
+        BarData barData = new BarData(xValues,barDataSets);
         return barData;
     }
 }

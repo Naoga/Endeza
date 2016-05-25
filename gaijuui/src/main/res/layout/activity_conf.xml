@@ -1,14 +1,143 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.study.gaijuui.ConfActivity">
+    tools:context="com.study.gaijuui.ConfActivity"
+    android:orientation="vertical"
+    android:weightSum="1">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="92dp"
+        android:orientation="horizontal"
+        android:background="@color/primary_text_disabled_material_light"
+        android:weightSum="1">
+        <Switch
+            android:layout_width="160dp"
+            android:layout_height="fill_parent"
+            android:text="通知の設定"
+            android:id="@+id/switch1"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_toLeftOf="@+id/textView"
+            android:layout_toStartOf="@+id/textView"
+            android:showText="true"
+            android:singleLine="false"
+            android:splitTrack="false"
+            android:checked="true"
+            android:textSize="21dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="通知のオンオフを\n切り替えます"
+            android:id="@+id/textView"
+            android:textIsSelectable="false"
+            android:longClickable="false"
+            android:textStyle="bold"
+            android:textSize="17sp"
+            android:gravity="center"
+            android:textColor="#000000" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="92dp"
+        android:orientation="horizontal"
+        android:background="@color/material_grey_300"
+        android:weightSum="1"
+        android:layout_marginTop="10dp">
+
+        <Switch
+            android:layout_width="160dp"
+            android:layout_height="fill_parent"
+            android:text="省電力設定"
+            android:id="@+id/switch2"
+            android:textSize="21dp"
+            android:textStyle="bold"
+            android:checked="false"
+            android:showText="true"
+            android:gravity="center" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="本システムを\n完全に停止させます\n※通知・撮影などすべての機能が停止します"
+            android:id="@+id/textView2"
+            android:textStyle="bold"
+            android:textSize="17dp"
+            android:gravity="center"
+            android:textColor="#000000" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="92dp"
+        android:orientation="horizontal"
+        android:background="@color/primary_text_disabled_material_light"
+        android:weightSum="1"
+        android:layout_marginTop="10dp">
+
+
+        <TextView
+            android:layout_width="143dp"
+            android:layout_height="match_parent"
+            android:text="ネットワーク\n設定"
+            android:id="@+id/textView3"
+            android:textStyle="bold"
+            android:textSize="21dp"
+            android:textColor="#000000"
+            android:gravity="center" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="ネットワークの\n設定をしたいときはここをタップしてください"
+            android:id="@+id/network_conf"
+            android:layout_gravity="right|center_horizontal"
+            android:textSize="15dp"
+            android:gravity="center"
+            android:textStyle="italic"
+            android:textColor="#000000" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="92dp"
+        android:orientation="horizontal"
+        android:background="@color/material_grey_300"
+        android:weightSum="1"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:layout_width="286dp"
+            android:layout_height="match_parent"
+            android:id="@+id/textView4"
+            android:text="右のボタンを押すと、すべての写真が消去され、統計データがリセットされます"
+            android:textSize="21dp"
+            android:gravity="center"
+            android:textColor="#000000" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="消去!!"
+            android:id="@+id/pict_delete"
+            android:layout_gravity="center_horizontal"
+            android:background="@color/bootstrap_brand_danger"
+            android:textSize="20dp"
+            android:textStyle="bold|italic" />
+    </LinearLayout>
 
     <com.beardedhen.androidbootstrap.BootstrapButton
         android:layout_width="wrap_content"
@@ -20,7 +149,14 @@
         app:roundedCorners="true"
         app:bootstrapText="トップにもどる {fa-long-arrow-left}"
         android:onClick="onClick"
-        android:id="@+id/but_topfromconf">
+        android:id="@+id/but_topfromconf"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="right"
+        android:layout_marginTop="10dp">
 
     </com.beardedhen.androidbootstrap.BootstrapButton>
-</RelativeLayout>
+
+
+</LinearLayout>

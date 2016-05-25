@@ -73,7 +73,7 @@ public class GaijuActivity extends AppCompatActivity implements View.OnClickList
             //データ画面へと遷移
             startActivity(intent);
         }
-        if(v.equals(mBut_Conf)){//設定ボタンが押されたときの動作
+        else if(v.equals(mBut_Conf)){//設定ボタンが押されたときの動作
             Intent intent = new Intent(this,ConfActivity.class);
             startActivity(intent);
         }
