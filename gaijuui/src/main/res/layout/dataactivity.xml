@@ -40,13 +40,12 @@
     </com.beardedhen.androidbootstrap.BootstrapButton>
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:text="1月"
         android:id="@+id/button"
-        android:layout_alignBottom="@+id/bar_chart"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="67dp" />
+        android:layout_alignBottom="@+id/bar_chart" />
 
 </RelativeLayout>

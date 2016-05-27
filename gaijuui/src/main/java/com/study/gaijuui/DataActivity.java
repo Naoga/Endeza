@@ -20,7 +20,7 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import java.util.ArrayList;
 
 public class DataActivity extends AppCompatActivity implements View.OnClickListener {
-
+    //メンバ変数の宣言
     private BootstrapButton mBut_TopFromData;
     private BarChart mBarChart;
 
@@ -28,20 +28,23 @@ public class DataActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dataactivity);
-
+        //メンバ変数をBootstrap用にキャスト
         mBut_TopFromData = (BootstrapButton) findViewById(R.id.but_topfromdata);
+        //OnClick用関数のリスナに設定
         mBut_TopFromData.setOnClickListener(this);
-        //棒グラフ用インスタンスの生成
+        //メンバ変数を棒グラフ用にキャスト
         mBarChart = (BarChart) findViewById(R.id.bar_chart);
+        //グラフの初期設定
         createChart();
+        //グラフデータをセット
         mBarChart.setData(setChartData());
     }
 
     @Override
     public void onClick(View v) {
-        if (v.equals(mBut_TopFromData)) {
-            Intent intent = new Intent(this, GaijuActivity.class);
-            startActivity(intent);
+        if (v.equals(mBut_TopFromData)) {//トップページへ戻る際
+            Intent intent = new Intent(this, GaijuActivity.class);//トップページへのインテントの生成
+            startActivity(intent);//画面遷移
         }
     }
 
@@ -91,7 +94,7 @@ public class DataActivity extends AppCompatActivity implements View.OnClickListe
     BarData setChartData() {
         ArrayList<BarDataSet> barDataSets = new ArrayList<>();
 
-        //x軸
+        //x軸ラベル
         ArrayList<String> xValues = new ArrayList<>();
         for(int i=0;i<12;i++){
             //String s=(i+1)+"月";
@@ -102,15 +105,18 @@ public class DataActivity extends AppCompatActivity implements View.OnClickListe
         //value(テスト用・静的な値)
         ArrayList<BarEntry> values = new ArrayList<>();
         for(int i=0;i<12;i++) {
-            values.add(new BarEntry(i+1,i));
+            values.add(new BarEntry(i+1,i));//BarEntry(Val,Pos)
         }
 
+        //凡例の設定 "　"内に記述
         BarDataSet valuesDataSet = new BarDataSet(values,"");
+        //色の設定
         valuesDataSet.setColor(ColorTemplate.COLORFUL_COLORS[3]);
-
+        //凡例とデータをセット
         barDataSets.add(valuesDataSet);
-
+        //X軸ラベルとデータを棒グラフ用クラスのフィールドに格納
         BarData barData = new BarData(xValues,barDataSets);
+
         return barData;
     }
 }
