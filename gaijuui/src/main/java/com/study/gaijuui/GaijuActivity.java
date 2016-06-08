@@ -31,10 +31,17 @@ public class GaijuActivity extends Activity implements View.OnClickListener{
     private BootstrapButton mBut_Conf;
     //private EditText mTestText ;
     //OnCreate()内に動作を記述する
+
+    boolean tgsw_flagnotice;
+    boolean tgsw_flagsave;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gaiju);
+
+        Intent intent=getIntent();
+        tgsw_flagnotice=intent.getBooleanExtra("tgsw_flagnotice",true);
+        tgsw_flagsave=intent.getBooleanExtra("tgsw_flagsave",false);
 
         //イノシシ画像の出力
         ImageView imageView1 = (ImageView) findViewById(R.id.image_view_1);
@@ -81,9 +88,10 @@ public class GaijuActivity extends Activity implements View.OnClickListener{
         mBut_Data= (BootstrapButton) findViewById(R.id.but_data);
         mBut_Conf=(BootstrapButton) findViewById(R.id.but_conf);
         //mTestText=(EditText) findViewById(R.id.TestText);
-        //OnClick()のリスナり設定
+        //OnClick()のリスナ設定
         mBut_Conf.setOnClickListener(this);
         mBut_Data.setOnClickListener(this);
+
     }
 
     //インターフェイスの実装 OnClickListner()
@@ -98,6 +106,8 @@ public class GaijuActivity extends Activity implements View.OnClickListener{
         }
         else if(v.equals(mBut_Conf)){//設定ボタンが押されたときの動作
             Intent intent = new Intent(this,ConfActivity.class);
+            intent.putExtra("tgsw_flagnotice",tgsw_flagnotice);
+            intent.putExtra("tgsw_flagsave",tgsw_flagsave);
             startActivity(intent);
         }
     }
