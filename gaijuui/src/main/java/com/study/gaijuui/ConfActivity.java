@@ -35,6 +35,7 @@ public class ConfActivity extends AppCompatActivity implements View.OnClickListe
     //トグルスイッチ用フラグ
     boolean tgsw_flagnotice=true;
     boolean tgsw_flagsave;
+    String strUsr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +45,7 @@ public class ConfActivity extends AppCompatActivity implements View.OnClickListe
         Intent intent=getIntent();
         tgsw_flagnotice=intent.getBooleanExtra("tgsw_flagnotice",true);
         tgsw_flagsave=intent.getBooleanExtra("tgsw_flagsave",false);
+        strUsr=intent.getStringExtra("strUsr");
 
         //各メンバ変数を各ウィジェット用にキャスト
         mBut_TopFromConf=(BootstrapButton) findViewById(R.id.but_topfromconf);
@@ -82,6 +84,7 @@ public class ConfActivity extends AppCompatActivity implements View.OnClickListe
             Intent intent = new Intent(this, GaijuActivity.class);
             intent.putExtra("tgsw_flagnotice",tgsw_flagnotice);
             intent.putExtra("tgsw_flagsave",tgsw_flagsave);
+            intent.putExtra("strUsr",strUsr);
             //画面遷移
             startActivity(intent);
         }
@@ -132,9 +135,10 @@ public class ConfActivity extends AppCompatActivity implements View.OnClickListe
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     EditText userName=(EditText)layout.findViewById(R.id.username);
-                    /*String strUser=userName.set
-                    strUser=userName.getText().toString();
-                    Toast.makeText( ConfActivity.this, "ユーザ名:"+strUser+"を登録", Toast.LENGTH_SHORT).show();*/
+                    //String strUser=userName.set
+                    //userName.setText(strUsr);
+                    strUsr=userName.getText().toString();
+                    Toast.makeText( ConfActivity.this, "ユーザ名:"+strUsr+"を登録", Toast.LENGTH_SHORT).show();
                 }
             });
             builder.setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {

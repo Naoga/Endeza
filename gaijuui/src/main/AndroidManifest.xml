@@ -11,6 +11,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".GaijuActivity"
+            android:screenOrientation="portrait"
             android:label="はたけまもる"
             android:theme="@style/AppTheme">
             <intent-filter>
@@ -21,9 +22,12 @@
         </activity>
         <activity
             android:name=".DataActivity"
-            android:label="統計データ"></activity>
+            android:label="統計データ"
+            android:screenOrientation="landscape">
+        </activity>
         <activity
             android:name=".ConfActivity"
+            android:screenOrientation="portrait"
             android:label="設定"></activity>
         <!--
  ATTENTION: This was auto-generated to add Google Play services to your project for
@@ -35,6 +39,7 @@
 
         <activity
             android:name=".NetworkActivity"
+            android:screenOrientation="portrait"
             android:label="ネットワーク設定"></activity>
     </application>
 
