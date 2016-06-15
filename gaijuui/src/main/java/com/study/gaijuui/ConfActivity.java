@@ -1,14 +1,21 @@
 package com.study.gaijuui;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager.LayoutParams;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -21,6 +28,7 @@ public class ConfActivity extends AppCompatActivity implements View.OnClickListe
     private BootstrapButton mBut_TopFromConf;
     private Button mNetowrk_Conf;
     private Button mPict_Delete;
+    private Button mUser_Conf;
     private Switch mTb_Notice;
     private Switch mTb_Save;
     //トグルスイッチ用フラグ
@@ -40,6 +48,7 @@ public class ConfActivity extends AppCompatActivity implements View.OnClickListe
         mBut_TopFromConf=(BootstrapButton) findViewById(R.id.but_topfromconf);
         mNetowrk_Conf=(Button)findViewById(R.id.network_conf);
         mPict_Delete=(Button)findViewById(R.id.pict_delete);
+        mUser_Conf=(Button)findViewById(R.id.user_conf);
         mTb_Notice=(Switch) findViewById(R.id.tb_notice);
         mTb_Save=(Switch)findViewById(R.id.tb_save);
 
@@ -47,6 +56,7 @@ public class ConfActivity extends AppCompatActivity implements View.OnClickListe
         mBut_TopFromConf.setOnClickListener(this);
         mNetowrk_Conf.setOnClickListener(this);
         mPict_Delete.setOnClickListener(this);
+        mUser_Conf.setOnClickListener(this);
         //onCheckedChangeListner()のリスナに設定
         mTb_Notice.setOnCheckedChangeListener(this);
         mTb_Save.setOnCheckedChangeListener(this);
@@ -61,6 +71,7 @@ public class ConfActivity extends AppCompatActivity implements View.OnClickListe
             //トグルスイッチをオンに書き換え
             mTb_Save.setChecked(true);
         }
+
     }
 
     @Override
@@ -107,6 +118,45 @@ public class ConfActivity extends AppCompatActivity implements View.OnClickListe
             });
             //通知バナーの表示
             alertDialog.create().show();
+        }
+        else if(v.equals(mUser_Conf)){
+            /*//ユーザ名の設定(未完成)
+            LayoutInflater inflater=(LayoutInflater)this.getSystemService(LAYOUT_INFLATER_SERVICE);
+            final View layout=inflater.inflate(R.layout.userconf_dialog,
+                    (ViewGroup)findViewById(R.id.layout_root));
+            AlertDialog.Builder builder=new AlertDialog.Builder(ConfActivity.this);
+            builder.setTitle("ユーザ名を入力してください");
+            builder.setView(layout);
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    EditText userName=(EditText)layout.findViewById(R.id.username);
+                    String strUser=userName.getText().toString();
+                }
+            });
+            builder.setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });*/
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(ConfActivity.this);
+            //ダイアログのタイトル
+            alertDialog.setTitle("注意!");
+            //ダイアログに表示するメッセージ
+            alertDialog.setMessage("すべての写真を消去しても良いですか？");
+            //"消去する"と表示
+            alertDialog.setPositiveButton("消去する", new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {//消去すると押されたら
+                    //ここに写真を消去するメソッドを書く
+                    //通知バナーの生成
+                    Toast toast = Toast.makeText(ConfActivity.this,"写真を消去しました",Toast.LENGTH_LONG);
+                    //バナーを表示
+                    toast.show();
+                }
+            });
         }
 
     }

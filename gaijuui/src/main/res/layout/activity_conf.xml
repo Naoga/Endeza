@@ -15,10 +15,11 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="92dp"
+        android:layout_height="80dp"
         android:orientation="horizontal"
         android:background="@color/primary_text_disabled_material_light"
-        android:weightSum="1">
+        android:weightSum="1"
+        android:layout_marginBottom="5dp">
         <Switch
             android:layout_width="160dp"
             android:layout_height="fill_parent"
@@ -53,11 +54,11 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="92dp"
+        android:layout_height="80dp"
         android:orientation="horizontal"
         android:background="@color/primary_text_disabled_material_light"
         android:weightSum="1"
-        android:layout_marginTop="10dp">
+        android:layout_marginBottom="5dp">
 
         <Switch
             android:layout_width="160dp"
@@ -76,22 +77,51 @@
             android:text="本システムを\n完全に停止させます\n※通知・撮影などすべての機能が停止します"
             android:id="@+id/textView2"
             android:textStyle="bold"
-            android:textSize="17dp"
+            android:textSize="15dp"
             android:gravity="center"
             android:textColor="#000000" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="92dp"
+        android:layout_height="80dp"
         android:orientation="horizontal"
         android:background="@color/primary_text_disabled_material_light"
         android:weightSum="1"
-        android:layout_marginTop="10dp">
+        android:layout_marginBottom="5dp">
+
+        <TextView
+            android:layout_width="154dp"
+            android:layout_height="match_parent"
+            android:id="@+id/textView5"
+            android:text="ユーザ名の\n設定"
+            android:textSize="21dp"
+            android:gravity="center"
+            android:textColor="#000000"
+            android:textStyle="bold" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="ユーザ名の設定をします\n初回利用時にはここをタップして登録してください"
+            android:id="@+id/user_conf"
+            android:layout_gravity="center_horizontal"
+            android:textSize="13dp"
+            android:textStyle="italic"
+            android:textColor="#000000" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:orientation="horizontal"
+        android:background="@color/primary_text_disabled_material_light"
+        android:weightSum="1"
+        android:layout_marginBottom="5dp">
 
 
         <TextView
-            android:layout_width="143dp"
+            android:layout_width="154dp"
             android:layout_height="match_parent"
             android:text="ネットワーク\n設定"
             android:id="@+id/textView3"
@@ -106,7 +136,7 @@
             android:text="ネットワークの\n設定をしたいときはここをタップしてください"
             android:id="@+id/network_conf"
             android:layout_gravity="right|center_horizontal"
-            android:textSize="15dp"
+            android:textSize="14dp"
             android:gravity="center"
             android:textStyle="italic"
             android:textColor="#000000" />
@@ -114,11 +144,11 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="92dp"
+        android:layout_height="80dp"
         android:orientation="horizontal"
         android:background="@color/primary_text_disabled_material_light"
         android:weightSum="1"
-        android:layout_marginTop="10dp">
+        android:layout_marginBottom="5dp">
 
         <TextView
             android:layout_width="154dp"
@@ -136,7 +166,7 @@
             android:text="害獣の写真および\n統計データをリセットしたいときはここをタップしてください"
             android:id="@+id/pict_delete"
             android:layout_gravity="center_horizontal"
-            android:textSize="15dp"
+            android:textSize="12dp"
             android:textStyle="italic"
             android:textColor="#000000" />
     </LinearLayout>
@@ -155,7 +185,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="10dp"
         android:layout_gravity="right">
 
     </com.beardedhen.androidbootstrap.BootstrapButton>
