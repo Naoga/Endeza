@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -120,7 +121,7 @@ public class ConfActivity extends AppCompatActivity implements View.OnClickListe
             alertDialog.create().show();
         }
         else if(v.equals(mUser_Conf)){
-            /*//ユーザ名の設定(未完成)
+            //ユーザ名の設定(未完成)
             LayoutInflater inflater=(LayoutInflater)this.getSystemService(LAYOUT_INFLATER_SERVICE);
             final View layout=inflater.inflate(R.layout.userconf_dialog,
                     (ViewGroup)findViewById(R.id.layout_root));
@@ -131,7 +132,9 @@ public class ConfActivity extends AppCompatActivity implements View.OnClickListe
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     EditText userName=(EditText)layout.findViewById(R.id.username);
-                    String strUser=userName.getText().toString();
+                    /*String strUser=userName.set
+                    strUser=userName.getText().toString();
+                    Toast.makeText( ConfActivity.this, "ユーザ名:"+strUser+"を登録", Toast.LENGTH_SHORT).show();*/
                 }
             });
             builder.setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {
@@ -139,24 +142,10 @@ public class ConfActivity extends AppCompatActivity implements View.OnClickListe
                 public void onClick(DialogInterface dialog, int which) {
 
                 }
-            });*/
-            AlertDialog.Builder alertDialog = new AlertDialog.Builder(ConfActivity.this);
-            //ダイアログのタイトル
-            alertDialog.setTitle("注意!");
-            //ダイアログに表示するメッセージ
-            alertDialog.setMessage("すべての写真を消去しても良いですか？");
-            //"消去する"と表示
-            alertDialog.setPositiveButton("消去する", new DialogInterface.OnClickListener() {
-
-                @Override
-                public void onClick(DialogInterface dialog, int which) {//消去すると押されたら
-                    //ここに写真を消去するメソッドを書く
-                    //通知バナーの生成
-                    Toast toast = Toast.makeText(ConfActivity.this,"写真を消去しました",Toast.LENGTH_LONG);
-                    //バナーを表示
-                    toast.show();
-                }
             });
+            builder.create().show();
+            /*Toast toast = Toast.makeText(ConfActivity.this,"ボタンが押されたよ",Toast.LENGTH_LONG);
+            toast.show(); //デバッグ用のトースト*/
         }
 
     }
