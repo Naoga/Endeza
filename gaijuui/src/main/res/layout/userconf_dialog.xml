@@ -10,7 +10,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="間違えて押してしまった場合は\n必ずキャンセルを押してください"
+        android:text="○間違えて押してしまった場合は\n 必ずキャンセルを押してください\n\n○入力は半角英数字のみです"
         android:layout_gravity="center_horizontal" />
     <TextView
         android:layout_width="wrap_content"

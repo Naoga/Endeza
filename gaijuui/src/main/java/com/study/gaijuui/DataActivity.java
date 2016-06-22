@@ -97,8 +97,7 @@ public class DataActivity extends AppCompatActivity implements View.OnClickListe
         //x軸ラベル
         ArrayList<String> xValues = new ArrayList<>();
         for(int i=0;i<12;i++){
-            //String s=(i+1)+"月";
-            String s="";
+            String s=(i+1)+"月";
             xValues.add(s);
         }
 

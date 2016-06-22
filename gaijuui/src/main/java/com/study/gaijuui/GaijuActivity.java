@@ -35,7 +35,7 @@ public class GaijuActivity extends Activity implements View.OnClickListener{
 
     boolean tgsw_flagnotice;
     boolean tgsw_flagsave;
-    String userName;
+    String userName=null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

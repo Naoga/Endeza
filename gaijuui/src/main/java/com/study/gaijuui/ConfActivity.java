@@ -35,7 +35,18 @@ public class ConfActivity extends AppCompatActivity implements View.OnClickListe
     //トグルスイッチ用フラグ
     boolean tgsw_flagnotice=true;
     boolean tgsw_flagsave;
-    String strUsr;
+    String strUsr,strUsrtmp;
+
+    //文字列が全角か半角かを判定するメソッド
+    boolean isHalfAlphanum(String value){
+        if(value==null || value.length()==0)
+            return true;
+        int len=value.length();
+        byte[] bytes=value.getBytes();
+        if(len != bytes.length)
+            return false;
+        return true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,11 +145,22 @@ public class ConfActivity extends AppCompatActivity implements View.OnClickListe
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    strUsrtmp=strUsr;
                     EditText userName=(EditText)layout.findViewById(R.id.username);
                     //String strUser=userName.set
                     //userName.setText(strUsr);
                     strUsr=userName.getText().toString();
-                    Toast.makeText( ConfActivity.this, "ユーザ名:"+strUsr+"を登録", Toast.LENGTH_SHORT).show();
+                    if(isHalfAlphanum(strUsr)){
+                        if(strUsr.length()!=0) {
+                            Toast.makeText(ConfActivity.this, "ユーザ名:" + strUsr + "を登録", Toast.LENGTH_SHORT).show();
+                        }else{
+                            Toast.makeText(ConfActivity.this, "空白は登録できません", Toast.LENGTH_SHORT).show();
+                            strUsr=strUsrtmp;
+                        }
+                    }else{
+                        Toast.makeText( ConfActivity.this, "全角文字が含まれているので登録できませんでした", Toast.LENGTH_SHORT).show();
+                        strUsr=strUsrtmp;
+                    }
                 }
             });
             builder.setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {
