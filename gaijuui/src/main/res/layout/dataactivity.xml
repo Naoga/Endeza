@@ -19,90 +19,6 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
-
-    <!--<LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:background="#000000"
-        android:layout_below="@+id/bar_chart"
-        android:layout_centerHorizontal="true">
-        <Button
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:text="1月"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-        <Button
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:text="2月"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-        <Button
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:text="3月"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-        <Button
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:text="4月"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-        <Button
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:text="5月"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-        <Button
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:text="6月"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-        <Button
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:text="7月"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-        <Button
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:text="8月"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-        <Button
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:text="9月"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-        <Button
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:text="10月"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-        <Button
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:text="11月"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-        <Button
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:text="12月"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-
-
-    </LinearLayout>-->
-
     <com.beardedhen.androidbootstrap.BootstrapButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -122,7 +38,11 @@
         android:longClickable="false"
         android:layout_gravity="right"
         android:layout_marginTop="5dp">
-
     </com.beardedhen.androidbootstrap.BootstrapButton>
 
+    <Button
+        android:layout_width="137dp"
+        android:layout_height="wrap_content"
+        android:text="New Button"
+        android:id="@+id/toPict" />
 </LinearLayout>

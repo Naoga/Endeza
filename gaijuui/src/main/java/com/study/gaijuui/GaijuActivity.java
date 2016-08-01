@@ -33,18 +33,24 @@ public class GaijuActivity extends Activity implements View.OnClickListener{
     //private EditText mTestText ;
     //OnCreate()内に動作を記述する
 
+    //トグルボタンの状態を保持するフィールド
     boolean tgsw_flagnotice;
     boolean tgsw_flagsave;
+    //ユーザ名の初期値はnull
     String userName=null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gaiju);
-
+        //遷移元のインテントを取得
         Intent intent=getIntent();
+        //通知用トグルボタンの状態を取得
         tgsw_flagnotice=intent.getBooleanExtra("tgsw_flagnotice",true);
+        //省電力用トグルボタンの状態を取得
         tgsw_flagsave=intent.getBooleanExtra("tgsw_flagsave",false);
+        //ユーザ名を取得
         userName=intent.getStringExtra("strUsr");
+        //userName=intent.getStringExtra("strUsr");
 
         //イノシシ画像の出力
         ImageView imageView1 = (ImageView) findViewById(R.id.image_view_1);
@@ -95,7 +101,8 @@ public class GaijuActivity extends Activity implements View.OnClickListener{
         //OnClick()のリスナ設定
         mBut_Conf.setOnClickListener(this);
         mBut_Data.setOnClickListener(this);
-        //ユーザ名の表示
+
+        //ユーザ名の表示　※要改良(見た目)--最低限の表示のみ実装
         if(userName==null){
             mUsrtxt.setText("設定画面でユーザ名を入力してください");
         }else {
@@ -109,18 +116,23 @@ public class GaijuActivity extends Activity implements View.OnClickListener{
     public void onClick(View v) { //vはどのViewが押されたかを受け取る
         if(v.equals(mBut_Data)){ //データボタンが押されたときの動作
             //mTestText.setText("button push");　buttonデバッグ用
-            //画面遷移用のインテントの生成
+            //グラフ画面へのインテントを生成
             Intent intent = new Intent(this, DataActivity.class);
+            intent.putExtra("strUsrfg",userName);
             //データ画面へと遷移
             startActivity(intent);
         }
         else if(v.equals(mBut_Conf)){//設定ボタンが押されたときの動作
-            Toast toast = Toast.makeText(GaijuActivity.this,"flagnotice's logic is"+tgsw_flagnotice,Toast.LENGTH_LONG);
-            toast.show(); //デバッグ用のトースト
+            //トグルボタンの状態確認(デバッグ)
+            /*Toast toast = Toast.makeText(GaijuActivity.this,"flagnotice's logic is"+tgsw_flagnotice,Toast.LENGTH_LONG);
+            toast.show(); //デバッグ用のトースト*/
+            //設定画面へのインテントを生成
             Intent intent = new Intent(this,ConfActivity.class);
+            //設定画面へ持ち込むパラメータの指定
             intent.putExtra("tgsw_flagnotice",tgsw_flagnotice);
             intent.putExtra("tgsw_flagsave",tgsw_flagsave);
             intent.putExtra("strUsr",userName);
+            //遷移する
             startActivity(intent);
         }
     }

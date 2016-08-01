@@ -23,6 +23,7 @@ import android.widget.ToggleButton;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 
+
 public class ConfActivity extends AppCompatActivity implements View.OnClickListener , CompoundButton.OnCheckedChangeListener{
 
     //メンバ変数の宣言
@@ -35,27 +36,21 @@ public class ConfActivity extends AppCompatActivity implements View.OnClickListe
     //トグルスイッチ用フラグ
     boolean tgsw_flagnotice=true;
     boolean tgsw_flagsave;
+    //ユーザ名登録用フィールド
     String strUsr,strUsrtmp;
 
-    //文字列が全角か半角かを判定するメソッド
-    boolean isHalfAlphanum(String value){
-        if(value==null || value.length()==0)
-            return true;
-        int len=value.length();
-        byte[] bytes=value.getBytes();
-        if(len != bytes.length)
-            return false;
-        return true;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_conf);
-
+        //遷移元からのインテントを取得
         Intent intent=getIntent();
+        //通知用トグルボタンの状態を取得
         tgsw_flagnotice=intent.getBooleanExtra("tgsw_flagnotice",true);
+        //省電力用トグルボタンの状態を取得
         tgsw_flagsave=intent.getBooleanExtra("tgsw_flagsave",false);
+        //ユーザ名を取得
         strUsr=intent.getStringExtra("strUsr");
 
         //各メンバ変数を各ウィジェット用にキャスト
@@ -71,6 +66,7 @@ public class ConfActivity extends AppCompatActivity implements View.OnClickListe
         mNetowrk_Conf.setOnClickListener(this);
         mPict_Delete.setOnClickListener(this);
         mUser_Conf.setOnClickListener(this);
+
         //onCheckedChangeListner()のリスナに設定
         mTb_Notice.setOnCheckedChangeListener(this);
         mTb_Save.setOnCheckedChangeListener(this);
@@ -93,6 +89,7 @@ public class ConfActivity extends AppCompatActivity implements View.OnClickListe
         if(v.equals(mBut_TopFromConf)){//トップページに戻るボタンが押されたら
             //インテントの生成
             Intent intent = new Intent(this, GaijuActivity.class);
+            //遷移先に持ち込む値を指定
             intent.putExtra("tgsw_flagnotice",tgsw_flagnotice);
             intent.putExtra("tgsw_flagsave",tgsw_flagsave);
             intent.putExtra("strUsr",strUsr);
@@ -102,6 +99,7 @@ public class ConfActivity extends AppCompatActivity implements View.OnClickListe
         else if(v.equals(mNetowrk_Conf)){
             //ネットワーク設定画面の遷移
             Intent intent=new Intent(this,NetworkActivity.class);
+            intent.putExtra("strUsrtn",strUsr);
             startActivity(intent);
         }
         else if(v.equals(mPict_Delete)) {
@@ -135,45 +133,81 @@ public class ConfActivity extends AppCompatActivity implements View.OnClickListe
             alertDialog.create().show();
         }
         else if(v.equals(mUser_Conf)){
-            //ユーザ名の設定(未完成)
+            //ユーザ名の設定
+            //レイアウト取得用のフィールドを定義
             LayoutInflater inflater=(LayoutInflater)this.getSystemService(LAYOUT_INFLATER_SERVICE);
+            //userconf_dialog(レイアウトファイル)のlayout_rootを取得
             final View layout=inflater.inflate(R.layout.userconf_dialog,
                     (ViewGroup)findViewById(R.id.layout_root));
+            //ダイアログ用のフィールドを定義
             AlertDialog.Builder builder=new AlertDialog.Builder(ConfActivity.this);
+            //ダイアログのタイトル指定
             builder.setTitle("ユーザ名を入力してください");
+            //ダイアログにレイアウトファイルを貼り付け
             builder.setView(layout);
+            //OKボタンと、それのコールバックを記述
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    //現ユーザ名を退避
                     strUsrtmp=strUsr;
+                    //ユーザが入力するフォームを生成
                     EditText userName=(EditText)layout.findViewById(R.id.username);
                     //String strUser=userName.set
                     //userName.setText(strUsr);
+                    //ユーザが入力したユーザ名を取得
                     strUsr=userName.getText().toString();
+                    //全角半角確認
                     if(isHalfAlphanum(strUsr)){
-                        if(strUsr.length()!=0) {
+                        //正常入力なら(半角かつ空白でない)
+                        if(!isSpaceExist(strUsr)) {
                             Toast.makeText(ConfActivity.this, "ユーザ名:" + strUsr + "を登録", Toast.LENGTH_SHORT).show();
-                        }else{
+                        }else{//ユーザ名が空白なら
                             Toast.makeText(ConfActivity.this, "空白は登録できません", Toast.LENGTH_SHORT).show();
+                            //元のユーザ名を取得
                             strUsr=strUsrtmp;
                         }
-                    }else{
+                    }else{//全角なら
                         Toast.makeText( ConfActivity.this, "全角文字が含まれているので登録できませんでした", Toast.LENGTH_SHORT).show();
+                        //元のユーザ名を取得
                         strUsr=strUsrtmp;
                     }
                 }
             });
+            //キャンセルボタンとそれのコールバックを記述
             builder.setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {
                 @Override
-                public void onClick(DialogInterface dialog, int which) {
+                public void onClick(DialogInterface dialog, int which) {//何も起こさない
 
                 }
             });
+            //ダイアログを表示する
             builder.create().show();
             /*Toast toast = Toast.makeText(ConfActivity.this,"ボタンが押されたよ",Toast.LENGTH_LONG);
             toast.show(); //デバッグ用のトースト*/
         }
 
+    }
+
+    //文字列が全角か半角かを判定するメソッド
+    boolean isHalfAlphanum(String value){
+        if(value==null || value.length()==0)
+            return true;
+        int len=value.length();
+        byte[] bytes=value.getBytes();
+        if(len != bytes.length)
+            return false;
+        return true;
+    }
+
+    boolean isSpaceExist(String value){
+        String[] spaceCheck=new String[value.length()];
+        for(int i=0;i<value.length();i++){
+            spaceCheck[i]=String.valueOf(value.charAt(i));
+            if(spaceCheck[i]=="")
+                return true;
+        }
+        return false;
     }
 
     @Override

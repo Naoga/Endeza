@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?><!-- androidbootstrapの設定ファイル(変更の必要なし) -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.study.gaijuui">
-
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:name=".TestBootstrap"
         android:allowBackup="true"
@@ -11,8 +11,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".GaijuActivity"
-            android:screenOrientation="portrait"
             android:label="はたけまもる"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,12 +23,11 @@
         <activity
             android:name=".DataActivity"
             android:label="統計データ"
-            android:screenOrientation="landscape">
-        </activity>
+            android:screenOrientation="landscape" />
         <activity
             android:name=".ConfActivity"
-            android:screenOrientation="portrait"
-            android:label="設定"></activity>
+            android:label="設定"
+            android:screenOrientation="portrait" />
         <!--
  ATTENTION: This was auto-generated to add Google Play services to your project for
      App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -39,8 +38,12 @@
 
         <activity
             android:name=".NetworkActivity"
-            android:screenOrientation="portrait"
-            android:label="ネットワーク設定"></activity>
+            android:label="ネットワーク設定"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity_GaijuPict"
+            android:label="害獣写真一覧"
+            android:screenOrientation="portrait">
+        </activity>
     </application>
-
 </manifest>
