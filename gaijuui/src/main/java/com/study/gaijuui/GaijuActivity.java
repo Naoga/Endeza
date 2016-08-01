@@ -20,6 +20,16 @@ import android.app.Application;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.TypefaceProvider;
+import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 
 import java.io.File;
 import java.io.IOException;
@@ -51,6 +61,13 @@ public class GaijuActivity extends Activity implements View.OnClickListener{
         //ユーザ名を取得
         userName=intent.getStringExtra("strUsr");
         //userName=intent.getStringExtra("strUsr");
+
+
+          //  super.onCreate(savedInstanceState);
+            //setContentView(R.layout.activity_gaiju);
+            Button button = (Button) findViewById(R.id.button1);
+            button.setOnClickListener(this);
+
 
         //イノシシ画像の出力
         ImageView imageView1 = (ImageView) findViewById(R.id.image_view_1);
@@ -111,6 +128,9 @@ public class GaijuActivity extends Activity implements View.OnClickListener{
 
     }
 
+
+
+
     //インターフェイスの実装 OnClickListner()
     @Override
     public void onClick(View v) { //vはどのViewが押されたかを受け取る
@@ -135,5 +155,20 @@ public class GaijuActivity extends Activity implements View.OnClickListener{
             //遷移する
             startActivity(intent);
         }
+        //!!
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        //クリックした時にintentを発行
+        Intent notificationIntent = new Intent(this, GaijuActivity.class);
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+        Notification notification = new NotificationCompat.Builder(this)
+                /*.setSmallIcon(R.drawable.ic_launcher) // アイコン*/
+                .setTicker("Hello") // 通知バーに表示する簡易メッセージ
+                .setWhen(System.currentTimeMillis()) // 時間
+                .setContentTitle("My notification") // 展開メッセージのタイトル
+                .setContentText("Hello Notification!!") // 展開メッセージの詳細メッセージ
+                .setContentIntent(contentIntent) // PendingIntent
+                .build();
+        notificationManager.notify(1, notification);
+        //!!
     }
 }
