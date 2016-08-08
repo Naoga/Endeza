@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -31,7 +32,9 @@ public class DataActivity extends AppCompatActivity implements View.OnClickListe
     private BarChart mBarChart;
     int month;
     String strUsrfg;
+    String barGraphData;
     private Button mtoPict;
+    int num[]=new int[12];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +42,12 @@ public class DataActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.dataactivity);
         Intent intent=getIntent();
         strUsrfg=intent.getStringExtra("strUsrfg");
-
+        barGraphData=intent.getStringExtra("barGraphData");
+        /*Toast toast = Toast.makeText(DataActivity.this,barGraphData,Toast.LENGTH_LONG);
+        toast.show();*/
+        for(int i=0;i<12;i++){
+            num[i]=i+1;
+        }
         //メンバ変数をBootstrap用にキャスト
         mBut_TopFromData = (BootstrapButton) findViewById(R.id.but_topfromdata);
         mtoPict=(Button) findViewById(R.id.toPict);
@@ -127,7 +135,7 @@ public class DataActivity extends AppCompatActivity implements View.OnClickListe
         //value(テスト用・静的な値)
         ArrayList<BarEntry> values = new ArrayList<>();
         for(int i=0;i<12;i++) {
-            values.add(new BarEntry(i+1,i));//BarEntry(Val,Pos)
+            values.add(new BarEntry(num[i],i));//BarEntry(Val,Pos)
         }
 
         //凡例の設定 "　"内に記述

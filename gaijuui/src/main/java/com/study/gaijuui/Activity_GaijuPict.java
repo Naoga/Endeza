@@ -3,6 +3,7 @@ package com.study.gaijuui;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Layout;
@@ -72,13 +73,18 @@ public class Activity_GaijuPict extends AppCompatActivity implements View.OnClic
         Layout.addView(iv);*/
         //以下静的な画像の表示
         ImageView img1=(ImageView)findViewById(R.id.picttest1);
-        try {
+        //Uri uri=Uri.parse("http://cdn-ak.f.st-hatena.com/images/fotolife/f/fjswkun/20150927/20150927140905.jpg");
+        Uri uri=Uri.parse("http://inoshishi.etc64.com/image/inoshishi04.jpg");
+        Uri.Builder builder=uri.buildUpon();
+        HttpGetPict pict=new HttpGetPict(img1);
+        pict.execute(builder);
+        /*try {
             InputStream istream = getAssets().open("shishitest1.png");
             Bitmap bitmap = BitmapFactory.decodeStream(istream);
             img1.setImageBitmap(bitmap);
         } catch (IOException e) {//例外(エラー)処理
             Log.d("Asetts", "Error");
-        }
+        }*/
 
         ImageView img2=(ImageView)findViewById(R.id.picttest2);
         try {
