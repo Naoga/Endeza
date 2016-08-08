@@ -105,4 +105,12 @@
         android:layout_marginRight="78dp"
         android:layout_marginEnd="78dp"
         android:textSize="30dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Button"
+        android:id="@+id/button1"
+        android:layout_below="@+id/Usrtxt"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>
