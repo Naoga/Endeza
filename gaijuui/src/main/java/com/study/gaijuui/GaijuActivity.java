@@ -149,8 +149,8 @@ public class GaijuActivity extends Activity implements View.OnClickListener {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            Toast toast = Toast.makeText(GaijuActivity.this,taskText,Toast.LENGTH_LONG);
-            toast.show();
+            /*Toast toast = Toast.makeText(GaijuActivity.this,taskText,Toast.LENGTH_LONG);
+            toast.show();*/
             barGraphData=taskText;
             //mTestText.setText("button push");　buttonデバッグ用
             //グラフ画面へのインテントを生成
