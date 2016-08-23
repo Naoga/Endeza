@@ -134,57 +134,63 @@ public class ConfActivity extends AppCompatActivity implements View.OnClickListe
         }
         else if(v.equals(mUser_Conf)){
             //ユーザ名の設定
-            //レイアウト取得用のフィールドを定義
-            LayoutInflater inflater=(LayoutInflater)this.getSystemService(LAYOUT_INFLATER_SERVICE);
-            //userconf_dialog(レイアウトファイル)のlayout_rootを取得
-            final View layout=inflater.inflate(R.layout.userconf_dialog,
-                    (ViewGroup)findViewById(R.id.layout_root));
-            //ダイアログ用のフィールドを定義
-            AlertDialog.Builder builder=new AlertDialog.Builder(ConfActivity.this);
-            //ダイアログのタイトル指定
-            builder.setTitle("ユーザ名を入力してください");
-            //ダイアログにレイアウトファイルを貼り付け
-            builder.setView(layout);
-            //OKボタンと、それのコールバックを記述
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    //現ユーザ名を退避
-                    strUsrtmp=strUsr;
-                    //ユーザが入力するフォームを生成
-                    EditText userName=(EditText)layout.findViewById(R.id.username);
-                    //String strUser=userName.set
-                    //userName.setText(strUsr);
-                    //ユーザが入力したユーザ名を取得
-                    strUsr=userName.getText().toString();
-                    //全角半角確認
-                    if(isHalfAlphanum(strUsr)){
-                        //正常入力なら(半角かつ空白でない)
-                        if(!isSpaceExist(strUsr)) {
-                            Toast.makeText(ConfActivity.this, "ユーザ名:" + strUsr + "を登録", Toast.LENGTH_SHORT).show();
-                        }else{//ユーザ名が空白なら
-                            Toast.makeText(ConfActivity.this, "空白は登録できません", Toast.LENGTH_SHORT).show();
+            if(strUsr == null){
+                //レイアウト取得用のフィールドを定義
+                LayoutInflater inflater=(LayoutInflater)this.getSystemService(LAYOUT_INFLATER_SERVICE);
+                //userconf_dialog(レイアウトファイル)のlayout_rootを取得
+                final View layout=inflater.inflate(R.layout.userconf_dialog,
+                        (ViewGroup)findViewById(R.id.layout_root));
+                //ダイアログ用のフィールドを定義
+                AlertDialog.Builder builder=new AlertDialog.Builder(ConfActivity.this);
+                //ダイアログのタイトル指定
+                builder.setTitle("ユーザ名を入力してください");
+                //ダイアログにレイアウトファイルを貼り付け
+                builder.setView(layout);
+                //OKボタンと、それのコールバックを記述
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //現ユーザ名を退避
+                        strUsrtmp=strUsr;
+                        //ユーザが入力するフォームを生成
+                        EditText userName=(EditText)layout.findViewById(R.id.username);
+                        //String strUser=userName.set
+                        //userName.setText(strUsr);
+                        //ユーザが入力したユーザ名を取得
+                        strUsr=userName.getText().toString();
+                        //全角半角確認
+                        if(isHalfAlphanum(strUsr)){
+                            //正常入力なら(半角かつ空白でない)
+                            if(!isSpaceExist(strUsr)) {
+                                Toast.makeText(ConfActivity.this, "ユーザ名:" + strUsr + "を登録", Toast.LENGTH_SHORT).show();
+                            }else{//ユーザ名が空白なら
+                                Toast.makeText(ConfActivity.this, "空白は登録できません", Toast.LENGTH_SHORT).show();
+                                //元のユーザ名を取得
+                                strUsr=strUsrtmp;
+                            }
+                        }else{//全角なら
+                            Toast.makeText( ConfActivity.this, "全角文字が含まれているので登録できませんでした", Toast.LENGTH_SHORT).show();
                             //元のユーザ名を取得
                             strUsr=strUsrtmp;
                         }
-                    }else{//全角なら
-                        Toast.makeText( ConfActivity.this, "全角文字が含まれているので登録できませんでした", Toast.LENGTH_SHORT).show();
-                        //元のユーザ名を取得
-                        strUsr=strUsrtmp;
                     }
-                }
-            });
-            //キャンセルボタンとそれのコールバックを記述
-            builder.setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {//何も起こさない
+                });
+                //キャンセルボタンとそれのコールバックを記述
+                builder.setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {//何も起こさない
 
-                }
-            });
-            //ダイアログを表示する
-            builder.create().show();
-            /*Toast toast = Toast.makeText(ConfActivity.this,"ボタンが押されたよ",Toast.LENGTH_LONG);
-            toast.show(); //デバッグ用のトースト*/
+                    }
+                });
+                //ダイアログを表示する
+                builder.create().show();
+                /*Toast toast = Toast.makeText(ConfActivity.this,"ボタンが押されたよ",Toast.LENGTH_LONG);
+                toast.show(); //デバッグ用のトースト*/
+            }else{
+                Toast toast = Toast.makeText(ConfActivity.this,"一度決めたユーザ名は変更できません",Toast.LENGTH_LONG);
+                toast.show();
+            }
+
         }
 
     }

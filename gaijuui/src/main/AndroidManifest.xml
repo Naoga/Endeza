@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?><!-- androidbootstrapの設定ファイル(変更の必要なし) -->
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.study.gaijuui">
-
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:name=".TestBootstrap"
         android:allowBackup="true"
@@ -41,6 +41,12 @@
             android:name=".NetworkActivity"
             android:screenOrientation="portrait"
             android:label="ネットワーク設定"></activity>
+
+        <activity
+            android:name=".Activity_GaijuPict"
+            android:screenOrientation="portrait"
+            android:label="害獣写真を表示">
+        </activity>
     </application>
 
 </manifest>

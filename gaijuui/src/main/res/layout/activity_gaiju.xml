@@ -15,8 +15,8 @@
     <ImageView
         android:id="@+id/image_view_2"
         android:scaleType="fitCenter"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:baselineAlignBottom="false"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
@@ -25,14 +25,6 @@
         android:layout_marginRight="10dp" />
 
     <!--イノシシ画像のレイアウト/現段階ではイラストの表示-->
-    <ImageView
-        android:id="@+id/image_view_1"
-        android:scaleType="fitCenter"
-        android:layout_width="match_parent"
-        android:layout_height="189dp"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp" />
 
     <!--設定ボタンのレイアウト
         Brand:ボタンタイプの変更
@@ -85,7 +77,6 @@
             android:layout_alignParentStart="true"
             android:onClick="onClick"
             android:layout_gravity="top" />
-
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -94,23 +85,27 @@
 
     </LinearLayout>
 
+    <ImageView
+        android:id="@+id/image_view_1"
+        android:scaleType="fitCenter"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:adjustViewBounds="false"
+        android:layout_marginBottom="51dp"
+        android:layout_above="@+id/Usrtxt"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="New Text"
         android:id="@+id/Usrtxt"
-        android:layout_below="@+id/image_view_1"
-        android:layout_alignRight="@+id/image_view_1"
-        android:layout_alignEnd="@+id/image_view_1"
-        android:layout_marginRight="78dp"
-        android:layout_marginEnd="78dp"
-        android:textSize="30dp" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Button"
-        android:id="@+id/button1"
-        android:layout_below="@+id/Usrtxt"
+        android:textSize="25dp"
+        android:background="@drawable/frame_style"
+        android:layout_marginBottom="17dp"
+        android:gravity="center_horizontal"
+        android:layout_above="@+id/linearLayout"
         android:layout_centerHorizontal="true" />
+
 </RelativeLayout>

@@ -18,7 +18,7 @@ import java.net.URL;
  */
 
 
-
+//写真取得用クラス
 public class HttpGetPict extends AsyncTask<Uri.Builder, Void, Bitmap>{
     private ImageView imageView;
 
