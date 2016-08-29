@@ -43,11 +43,22 @@ public class DataActivity extends AppCompatActivity implements View.OnClickListe
         Intent intent=getIntent();
         strUsrfg=intent.getStringExtra("strUsrfg");
         barGraphData=intent.getStringExtra("barGraphData");
-        /*Toast toast = Toast.makeText(DataActivity.this,barGraphData,Toast.LENGTH_LONG);
-        toast.show();*/
+        System.out.println(barGraphData);
+        //String barGraphDataArray[];
+        String[] barGraphDataArray=barGraphData.split(",",0);
+        for(int i=0;i<barGraphDataArray.length;i++) {
+            num[i] = Integer.parseInt(barGraphDataArray[i]);
+        }
         for(int i=0;i<12;i++){
             num[i]=i+1;
         }
+
+        /*Toast toast = Toast.makeText(DataActivity.this,barGraphData,Toast.LENGTH_LONG);
+        toast.show();*/
+        /*for(int i=0;i<12;i++){
+            num[i]=i+1;
+        }*/
+
         //メンバ変数をBootstrap用にキャスト
         mBut_TopFromData = (BootstrapButton) findViewById(R.id.but_topfromdata);
         mtoPict=(Button) findViewById(R.id.toPict);
@@ -81,7 +92,7 @@ public class DataActivity extends AppCompatActivity implements View.OnClickListe
 
     void createChart() {
         //グラフへのコメント
-        mBarChart.setDescription("ここに説明が表示される");
+        //mBarChart.setDescription("ここに説明が表示される");
         //グラフの縦軸設定(左側のみ表示)
         mBarChart.getAxisRight().setEnabled(false);
         mBarChart.getAxisLeft().setEnabled(true);

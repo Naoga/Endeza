@@ -58,6 +58,7 @@ public class GaijuActivity extends Activity implements View.OnClickListener {
     String userName = null;
     String taskText;
     String barGraphData;
+    int count=0;
 
     Handler handler = new Handler();
 
@@ -78,13 +79,22 @@ public class GaijuActivity extends Activity implements View.OnClickListener {
         //指定時間間隔で実行
         /*Timer timer1=new Timer();
         timer1.schedule(new RoutineHttpCon(),0,60000);*/
+        String testText="<html><body>false<br>http://40.74.135.223/pic/3/3/1472012650971.jpg<br></body></html>";
+        String tmpText=brReplacer(testText);
+        String noHtmlText=htmlTagRemover(tmpText);
+        String[] testArray=noHtmlText.split(",",0);
+        for(int i=0;i<testArray.length;i++)
+            System.out.println(i+"番目の要素は"+testArray[i]);
 
         //イノシシ画像の出力
         ImageView imageView1 = (ImageView) findViewById(R.id.image_view_1);
-        Uri uri= Uri.parse("http://inoshishi.etc64.com/image/inoshishi04.jpg");
+        Uri uri = Uri.parse(testArray[1]);
         Uri.Builder builder = uri.buildUpon();
         HttpGetPict task = new HttpGetPict(imageView1);
         task.execute(builder);
+
+        Timer timer1=new Timer();
+        timer1.schedule(new RoutineHttpCon(),0,5000);
 
         /*try {
             //画像データの取得
@@ -140,7 +150,7 @@ public class GaijuActivity extends Activity implements View.OnClickListener {
         if (userName == null) {
             mUsrtxt.setText("設定画面でユーザ名を\n入力してください");
         } else {
-            mUsrtxt.setText("あなたのユーザ名\n「 " +userName+" 」");
+            mUsrtxt.setText("あなたのユーザ名\n「 " + userName + " 」");
         }
     }
 
@@ -155,7 +165,8 @@ public class GaijuActivity extends Activity implements View.OnClickListener {
             HttpGetTask task = new HttpGetTask();
             //URLを指定
             try {
-                task.setURL(new URL("http://www.drk7.jp/weather/xml/27.xml"));
+                //task.setURL(new URL("http://www.drk7.jp/weather/xml/27.xml"));
+                task.setURL(new URL("http://40.74.135.223:8080/test/mainServlet?from=0&requestID=1&Username=test"));
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
@@ -172,8 +183,14 @@ public class GaijuActivity extends Activity implements View.OnClickListener {
             /*Toast toast = Toast.makeText(GaijuActivity.this, taskText, Toast.LENGTH_LONG);
             toast.show();*/
             //通信結果はtaskTextに格納される
-            barGraphData=taskText;
-            System.out.println(barGraphData);
+            /*String tmpText=brReplacer(taskText);
+            /*System.out.println(tmpText);
+            System.out.println(taskText);
+            String tmpText=brReplacer(taskText);
+            System.out.println(tmpText);
+            String noHtmlText=htmlTagRemover(tmpText);
+            barGraphData = noHtmlText;
+            System.out.println(barGraphData);*/
             /*String[] strArray=taskText.split("\n",0);
             for(int i=0;i<strArray.length;i++)
                 System.out.println("要素番号 "+i+" の時"+strArray[i]);*/
@@ -184,16 +201,18 @@ public class GaijuActivity extends Activity implements View.OnClickListener {
 
 
             /*try {
-                new HttpGetTask().execute(new URL("http://www.drk7.jp/weather/xml/27.xml"));
+                new HttpGetTask().execute(new URL("http://40.74.135.223:8080/test/mainServlet?from=0&requestID=0&Username=root"));
             }catch (MalformedURLException e){
                 e.printStackTrace();
             }*/
 
             //mTestText.setText("button push");　buttonデバッグ用
+            System.out.println(taskText);
+            //barGraphData=htmlTagRemover(brReplacer(taskText));
             //グラフ画面へのインテントを生成
             Intent intent = new Intent(this, DataActivity.class);
             intent.putExtra("strUsrfg", userName);
-            intent.putExtra("barGraphData", barGraphData);
+            //intent.putExtra("barGraphData", barGraphData);
             //データ画面へと遷移
             startActivity(intent);
         } else if (v.equals(mBut_Conf)) {//設定ボタンが押されたときの動作
@@ -243,6 +262,14 @@ public class GaijuActivity extends Activity implements View.OnClickListener {
         return sb.toString();
     }
 
+    static String htmlTagRemover(String str){
+        return str.replaceAll("<.+?>","");
+    }
+
+    static String brReplacer(String str){
+        return str.replaceAll("<br.+?",",");
+    }
+
     //http通信用クラス
     public class HttpGetTask implements Runnable {
 
@@ -268,12 +295,13 @@ public class GaijuActivity extends Activity implements View.OnClickListener {
 
     //定期通信用クラス
     //HttpGetTaskインスタンスを生成しhttp通信を行う
-    /*public class RoutineHttpCon extends TimerTask{
+    public class RoutineHttpCon extends TimerTask{
 
         @Override
         public void run() {
-            //System.out.println("Hello");
-            HttpGetTask task = new HttpGetTask();
+            /*count++;
+            System.out.println(count+": Hello");*/
+            /*HttpGetTask task = new HttpGetTask();
             //URLを指定
             try {
                 task.setURL(new URL("http://www.drk7.jp/weather/xml/27.xml"));
@@ -291,9 +319,9 @@ public class GaijuActivity extends Activity implements View.OnClickListener {
                 e.printStackTrace();
             }
             barGraphData=taskText;
+        }*/
         }
-    }*/
-}
+    }
             /*handler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -380,3 +408,4 @@ public class GaijuActivity extends Activity implements View.OnClickListener {
             System.out.println(barGraphData);
         }
     }*/
+}

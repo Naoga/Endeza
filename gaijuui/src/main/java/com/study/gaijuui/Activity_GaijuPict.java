@@ -98,7 +98,7 @@ public class Activity_GaijuPict extends AppCompatActivity implements View.OnClic
         //ImageView img1 =new ImageView(this);
         //Uri uri=Uri.parse("http://cdn-ak.f.st-hatena.com/images/fotolife/f/fjswkun/20150927/20150927140905.jpg");
 
-        uri=Uri.parse("http://inoshishi.etc64.com/image/inoshishi04.jpg");
+        uri=Uri.parse("http://40.74.135.223/pic/3/3/1472012650971.jpg");
         pictSet(uri,img,layoutPictParams,layout);
 
         /*Uri.Builder builder=uri.buildUpon();
