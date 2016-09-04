@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -37,13 +38,15 @@ public class Activity_GaijuPict extends AppCompatActivity implements View.OnClic
     //private LinearLayout Layout;
     private BootstrapButton mtoBarData;
     int month;
-    int imageWidth=500,imageHeight=500,buttonWidth,buttonHeight;
-    String strUsrtp;
+    int imageWidth=500,imageHeight=500,layoutWidth=500,layoutHeight=500;
+    int num[]=new int[12];
+    String strUsrtp,barGraphData,pictData;
     String str;
     final int WC=ViewGroup.LayoutParams.WRAP_CONTENT;
     final int MP=ViewGroup.LayoutParams.MATCH_PARENT;
     ScrollView scrollView;
-    LinearLayout layout;
+    LinearLayout layout_root,layout_pict;
+    TextView tv;
     ImageView img;
     LinearLayout.LayoutParams layoutPictParams;
     Uri uri;
@@ -55,6 +58,27 @@ public class Activity_GaijuPict extends AppCompatActivity implements View.OnClic
         Intent intent=getIntent();
         month=intent.getIntExtra("month",0);
         strUsrtp=intent.getStringExtra("strUsrtp");
+        barGraphData=intent.getStringExtra("barGraphData");
+        pictData=intent.getStringExtra("pictData");
+        System.out.println(pictData);
+
+        String[] pictDataArray=pictData.split(",",0);
+        /*String[] pictDateData=new String[pictDataArray.length];
+        String[] pictUrlData=new String[pictDataArray.length];
+        for(int i=0;i<pictDataArray.length;i++)
+            System.out.println(pictDataArray[i]);
+        for(int i=0;i<pictDataArray.length;i+=2){
+            int count=0;
+            pictDateData[count++]=pictDataArray[i];
+            System.out.println(pictDateData[i]);
+        }
+        for(int i=1;i<pictDataArray.length;i+=2){
+            int count=0;
+            pictUrlData[count++]=pictDataArray[i];
+            System.out.println(pictUrlData[i]);
+        }*/
+
+
         /*LinearLayout Layout=new LinearLayout(this);
         Layout.setOrientation(LinearLayout.VERTICAL);
         setContentView(Layout);
@@ -90,16 +114,17 @@ public class Activity_GaijuPict extends AppCompatActivity implements View.OnClic
 
         /*ScrollView scrollView=new ScrollView(this);
         LinearLayout layout=new LinearLayout(this);*/
-        initLayout();
-        initPict();
         //以下静的な画像の表示
         //ImageView img1=(ImageView)findViewById(R.id.picttest1);
         //LinearLayout.LayoutParams layoutPictParams=new LinearLayout.LayoutParams(imageWidth,imageHeight);
         //ImageView img1 =new ImageView(this);
         //Uri uri=Uri.parse("http://cdn-ak.f.st-hatena.com/images/fotolife/f/fjswkun/20150927/20150927140905.jpg");
 
-        uri=Uri.parse("http://40.74.135.223/pic/3/3/1472012650971.jpg");
-        pictSet(uri,img,layoutPictParams,layout);
+        //uri=Uri.parse("http://40.74.135.223/pic/3/3/1472012650971.jpg");
+        /*createLayoutPict();
+        initPict();
+        uri=Uri.parse("http://inoshishi.etc64.com/image/inoshishi04.jp");
+        pictSet(uri,img,layoutPictParams,layout_pict);*/
 
         /*Uri.Builder builder=uri.buildUpon();
         HttpGetPict pict=new HttpGetPict(img1);
@@ -114,10 +139,16 @@ public class Activity_GaijuPict extends AppCompatActivity implements View.OnClic
         } catch (IOException e) {//例外(エラー)処理
             Log.d("Asetts", "Error");
         }*/
+        initLayout();
+        for(int i=0;i<pictDataArray.length;i++){
+            createLayoutPict();
+            initPict();
+            uri=Uri.parse("http://inoshishi.etc64.com/image/inoshishi04.jpg");
+            //uri=Uri.parse(pictDataArray[i+1]);
+            setText(pictDataArray[i++],layout_pict);
+            pictSet(uri,img,layoutPictParams,layout_pict);
+        }
 
-        initPict();
-        uri=Uri.parse("http://inoshishi.etc64.com/image/inoshishi04.jpg");
-        pictSet(uri,img,layoutPictParams,layout);
 
         //ImageView img2=(ImageView)findViewById(R.id.picttest2);
         /*ImageView img2=new ImageView(this);
@@ -132,7 +163,7 @@ public class Activity_GaijuPict extends AppCompatActivity implements View.OnClic
         layout.addView(img2);*/
 
         //ImageView img3=(ImageView)findViewById(R.id.picttest3);
-        ImageView img3=new ImageView(this);
+        /*ImageView img3=new ImageView(this);
         try {
             InputStream istream = getAssets().open("shishitest3.png");
             Bitmap bitmap = BitmapFactory.decodeStream(istream);
@@ -141,7 +172,7 @@ public class Activity_GaijuPict extends AppCompatActivity implements View.OnClic
             Log.d("Asetts", "Error");
         }
         img3.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        layout.addView(img3);
+        layout.addView(img3);*/
         /*buttonWidth=500;
         buttonHeight=100;
         LinearLayout.LayoutParams layoutButtonParams=new LinearLayout.LayoutParams(500,500);*/
@@ -155,9 +186,9 @@ public class Activity_GaijuPict extends AppCompatActivity implements View.OnClic
         mtoBarData.setBootstrapText(bootstrapText);
         mtoBarData.setOnClickListener(this);
         mtoBarData.setLayoutParams(new LinearLayout.LayoutParams(WC,WC));
-        layout.addView(mtoBarData);
+        layout_root.addView(mtoBarData);
 
-        scrollView.addView(layout);
+        scrollView.addView(layout_root);
 
         setContentView(scrollView);
     }
@@ -168,16 +199,24 @@ public class Activity_GaijuPict extends AppCompatActivity implements View.OnClic
             Intent intent=new Intent(this,DataActivity.class);
             intent.putExtra("month",month);
             intent.putExtra("strUsrfg",strUsrtp);
+            intent.putExtra("barGraphData",barGraphData);
             startActivity(intent);
         }
     }
 
+    //rootレイアウト(実行は一度のみでよい)
     public void initLayout(){
         scrollView=new ScrollView(this);
-        layout=new LinearLayout(this);
-        layout.setOrientation(layout.VERTICAL);
-        layout.setLayoutParams(new LinearLayout.LayoutParams(MP,MP));
-        layout.setGravity(Gravity.CENTER);
+        layout_root=new LinearLayout(this);
+        layout_root.setOrientation(layout_root.VERTICAL);
+        layout_root.setLayoutParams(new LinearLayout.LayoutParams(MP,MP));
+        layout_root.setGravity(Gravity.CENTER);
+    }
+
+    public void createLayoutPict(){
+        layout_pict=new LinearLayout(this);
+        layout_pict.setOrientation(layout_pict.HORIZONTAL);
+        layout_pict.setLayoutParams(new LinearLayout.LayoutParams(MP,MP));
     }
 
     public void initPict(){
@@ -185,12 +224,24 @@ public class Activity_GaijuPict extends AppCompatActivity implements View.OnClic
         img =new ImageView(this);
     }
 
+    public void setText(String message,LinearLayout layout){
+        tv=new TextView(this);
+        tv.setText(message);
+        tv.setTextColor(Color.BLACK);
+        LinearLayout.LayoutParams textGravity=new LinearLayout.LayoutParams(WC,WC);
+        textGravity.gravity=Gravity.BOTTOM;
+        //textGravity.gravity=Gravity.LEFT;
+        tv.setLayoutParams(textGravity);
+        layout.addView(tv);
+        //layout_root.addView(layout_pict);
+    }
     public void pictSet(Uri uri,ImageView iv,LinearLayout.LayoutParams pictSize,LinearLayout layout){
         Uri.Builder builder=uri.buildUpon();
         HttpGetPict pict=new HttpGetPict(iv);
         pict.execute(builder);
         iv.setLayoutParams(pictSize);
         layout.addView(iv);
+        layout_root.addView(layout);
     }
 
 

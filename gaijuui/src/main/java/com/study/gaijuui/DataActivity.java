@@ -24,6 +24,13 @@ import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class DataActivity extends AppCompatActivity implements View.OnClickListener,OnChartValueSelectedListener {
@@ -32,7 +39,7 @@ public class DataActivity extends AppCompatActivity implements View.OnClickListe
     private BarChart mBarChart;
     int month;
     String strUsrfg;
-    String barGraphData;
+    String barGraphData,taskText,pictData;
     private Button mtoPict;
     int num[]=new int[12];
 
@@ -48,9 +55,6 @@ public class DataActivity extends AppCompatActivity implements View.OnClickListe
         String[] barGraphDataArray=barGraphData.split(",",0);
         for(int i=0;i<barGraphDataArray.length;i++) {
             num[i] = Integer.parseInt(barGraphDataArray[i]);
-        }
-        for(int i=0;i<12;i++){
-            num[i]=i+1;
         }
 
         /*Toast toast = Toast.makeText(DataActivity.this,barGraphData,Toast.LENGTH_LONG);
@@ -83,9 +87,31 @@ public class DataActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(intent);//画面遷移
         }
         else if(v.equals(mtoPict)){
+            HttpGetTask task = new HttpGetTask();
+            //URLを指定
+            try {
+                task.setURL(new URL("http://40.74.135.223:8080/test/mainServlet?from=0&requestID=2&Username=test&month="+month));
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            //http通信スレッドを立てる
+            Thread thread = new Thread(task);
+            //立てたスレッドを起動
+            thread.start();
+            try {
+                //http通信が完了するまでメインスレッドを停止する
+                thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println(taskText);
+            pictData=htmlTagRemover(brReplacer(taskText));
             Intent intent = new Intent(this,Activity_GaijuPict.class);
             intent.putExtra("month",month);
             intent.putExtra("strUsrtp",strUsrfg);
+            //intent.putExtra("num",num);
+            intent.putExtra("barGraphData",barGraphData);
+            intent.putExtra("pictData",pictData);
             startActivity(intent);
         }
     }
@@ -183,5 +209,47 @@ public class DataActivity extends AppCompatActivity implements View.OnClickListe
 
     void intent_exe(View view){
         onClick(view);
+    }
+
+    static String InputStreamToString(InputStream is) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(is));
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while ((line = br.readLine()) != null) {
+            sb.append(line);
+        }
+        br.close();
+        return sb.toString();
+    }
+
+    static String htmlTagRemover(String str){
+        return str.replaceAll("<.+?>","");
+    }
+
+    static String brReplacer(String str){
+        return str.replaceAll("<br.+?",",");
+    }
+
+    //http通信用クラス
+    public class HttpGetTask implements Runnable {
+
+        private URL url;
+
+        public void setURL(URL url1) {
+            url = url1;
+        }
+
+        @Override
+        public void run() {
+            final StringBuilder result = new StringBuilder();
+            try {
+                //URL url = new URL("http://www.drk7.jp/weather/xml/27.xml");
+                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                taskText = InputStreamToString(con.getInputStream());
+                //Log.d("HTTP", taskText);
+            } catch (Exception ex) {
+                System.out.println(ex);
+            }
+        }
     }
 }

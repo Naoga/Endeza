@@ -58,6 +58,7 @@ public class GaijuActivity extends Activity implements View.OnClickListener {
     String userName = null;
     String taskText;
     String barGraphData;
+    String[] notifArray=new String[2];
     int count=0;
 
     Handler handler = new Handler();
@@ -77,24 +78,24 @@ public class GaijuActivity extends Activity implements View.OnClickListener {
         //userName=intent.getStringExtra("strUsr");
 
         //指定時間間隔で実行
-        /*Timer timer1=new Timer();
-        timer1.schedule(new RoutineHttpCon(),0,60000);*/
-        String testText="<html><body>false<br>http://40.74.135.223/pic/3/3/1472012650971.jpg<br></body></html>";
+        Timer timer1=new Timer();
+        timer1.schedule(new RoutineHttpCon(),0,5000);
+        /*String testText="<html><body>false<br>http://40.74.135.223/pic/3/3/1472012650971.jpg<br></body></html>";
         String tmpText=brReplacer(testText);
         String noHtmlText=htmlTagRemover(tmpText);
         String[] testArray=noHtmlText.split(",",0);
         for(int i=0;i<testArray.length;i++)
-            System.out.println(i+"番目の要素は"+testArray[i]);
+            System.out.println(i+"番目の要素は"+testArray[i]);*/
 
         //イノシシ画像の出力
-        ImageView imageView1 = (ImageView) findViewById(R.id.image_view_1);
+        /*ImageView imageView1 = (ImageView) findViewById(R.id.image_view_1);
         Uri uri = Uri.parse(testArray[1]);
         Uri.Builder builder = uri.buildUpon();
         HttpGetPict task = new HttpGetPict(imageView1);
-        task.execute(builder);
+        task.execute(builder);*/
 
-        Timer timer1=new Timer();
-        timer1.schedule(new RoutineHttpCon(),0,5000);
+        /*Timer timer1=new Timer();
+        timer1.schedule(new RoutineHttpCon(),0,5000);*/
 
         /*try {
             //画像データの取得
@@ -184,10 +185,7 @@ public class GaijuActivity extends Activity implements View.OnClickListener {
             toast.show();*/
             //通信結果はtaskTextに格納される
             /*String tmpText=brReplacer(taskText);
-            /*System.out.println(tmpText);
-            System.out.println(taskText);
-            String tmpText=brReplacer(taskText);
-            System.out.println(tmpText);
+            //System.out.println(tmpText);
             String noHtmlText=htmlTagRemover(tmpText);
             barGraphData = noHtmlText;
             System.out.println(barGraphData);*/
@@ -208,11 +206,11 @@ public class GaijuActivity extends Activity implements View.OnClickListener {
 
             //mTestText.setText("button push");　buttonデバッグ用
             System.out.println(taskText);
-            //barGraphData=htmlTagRemover(brReplacer(taskText));
+            barGraphData=htmlTagRemover(brReplacer(taskText));
             //グラフ画面へのインテントを生成
             Intent intent = new Intent(this, DataActivity.class);
             intent.putExtra("strUsrfg", userName);
-            //intent.putExtra("barGraphData", barGraphData);
+            intent.putExtra("barGraphData", barGraphData);
             //データ画面へと遷移
             startActivity(intent);
         } else if (v.equals(mBut_Conf)) {//設定ボタンが押されたときの動作
@@ -296,20 +294,20 @@ public class GaijuActivity extends Activity implements View.OnClickListener {
     //定期通信用クラス
     //HttpGetTaskインスタンスを生成しhttp通信を行う
     public class RoutineHttpCon extends TimerTask{
-
         @Override
         public void run() {
-            /*count++;
-            System.out.println(count+": Hello");*/
-            /*HttpGetTask task = new HttpGetTask();
+            int notifFlag=0;
+            count++;
+            System.out.println(count+": Hello");
+            HttpGetTask task_t = new HttpGetTask();
             //URLを指定
             try {
-                task.setURL(new URL("http://www.drk7.jp/weather/xml/27.xml"));
+                task_t.setURL(new URL("http://40.74.135.223:8080/test/mainServlet?from=0&requestID=0&Username=test"));
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
             //http通信スレッドを立てる
-            Thread thread = new Thread(task);
+            Thread thread = new Thread(task_t);
             //立てたスレッドを起動
             thread.start();
             try {
@@ -318,8 +316,20 @@ public class GaijuActivity extends Activity implements View.OnClickListener {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            barGraphData=taskText;
-        }*/
+
+            String notifText=htmlTagRemover(brReplacer(taskText));
+            notifArray=notifText.split(",",0);
+            if(notifArray[0].equals("true"))
+                notifFlag=1;
+            if(notifFlag==1)
+                notification();
+
+            ImageView imageView1 = (ImageView) findViewById(R.id.image_view_1);
+            //Uri uri = Uri.parse(notifArray[1]);
+            Uri uri=Uri.parse("http://inoshishi.etc64.com/image/inoshishi04.jpg");
+            Uri.Builder builder = uri.buildUpon();
+            HttpGetPict task_p = new HttpGetPict(imageView1);
+            task_p.execute(builder);
         }
     }
             /*handler.post(new Runnable() {
