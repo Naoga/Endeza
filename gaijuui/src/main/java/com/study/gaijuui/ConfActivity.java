@@ -8,6 +8,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,14 @@ import android.widget.ToggleButton;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 
 public class ConfActivity extends AppCompatActivity implements View.OnClickListener , CompoundButton.OnCheckedChangeListener{
 
@@ -37,7 +46,8 @@ public class ConfActivity extends AppCompatActivity implements View.OnClickListe
     boolean tgsw_flagnotice=true;
     boolean tgsw_flagsave;
     //ユーザ名登録用フィールド
-    String strUsr,strUsrtmp;
+    String strUsr,strUsrtmp,taskText;
+    int routinHttpConFlag;
 
 
     @Override
@@ -52,6 +62,8 @@ public class ConfActivity extends AppCompatActivity implements View.OnClickListe
         tgsw_flagsave=intent.getBooleanExtra("tgsw_flagsave",false);
         //ユーザ名を取得
         strUsr=intent.getStringExtra("strUsr");
+
+        routinHttpConFlag=intent.getIntExtra("routinHttpConFlag",routinHttpConFlag);
 
         //各メンバ変数を各ウィジェット用にキャスト
         mBut_TopFromConf=(BootstrapButton) findViewById(R.id.but_topfromconf);
@@ -93,6 +105,7 @@ public class ConfActivity extends AppCompatActivity implements View.OnClickListe
             intent.putExtra("tgsw_flagnotice",tgsw_flagnotice);
             intent.putExtra("tgsw_flagsave",tgsw_flagsave);
             intent.putExtra("strUsr",strUsr);
+            intent.putExtra("routinHttpConFlag",routinHttpConFlag);
             //画面遷移
             startActivity(intent);
         }
@@ -115,6 +128,27 @@ public class ConfActivity extends AppCompatActivity implements View.OnClickListe
                 @Override
                 public void onClick(DialogInterface dialog, int which) {//消去すると押されたら
                     //ここに写真を消去するメソッドを書く
+
+                    HttpGetTask task = new HttpGetTask();
+                    //URLを指定
+                    try {
+                        task.setURL(new URL("http://40.74.135.223:8080/test/mainServlet?from=0&requestID=5&Username="+strUsr));
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    }
+                    //http通信スレッドを立てる
+                    Thread thread = new Thread(task);
+                    //立てたスレッドを起動
+                    thread.start();
+                    try {
+                        //http通信が完了するまでメインスレッドを停止する
+                        thread.join();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println(taskText);
+                    String checkRemove=htmlTagRemover(brReplacer(taskText));
+
                     //通知バナーの生成
                     Toast toast = Toast.makeText(ConfActivity.this,"写真を消去しました",Toast.LENGTH_LONG);
                     //バナーを表示
@@ -151,28 +185,53 @@ public class ConfActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //現ユーザ名を退避
-                        strUsrtmp=strUsr;
+                        //strUsrtmp=strUsr;
                         //ユーザが入力するフォームを生成
                         EditText userName=(EditText)layout.findViewById(R.id.username);
                         //String strUser=userName.set
                         //userName.setText(strUsr);
                         //ユーザが入力したユーザ名を取得
-                        strUsr=userName.getText().toString();
+                        strUsrtmp=userName.getText().toString();
                         //全角半角確認
-                        if(isHalfAlphanum(strUsr)){
+                        if(isHalfAlphanum(strUsrtmp)){
                             //正常入力なら(半角かつ空白でない)
-                            if(!isSpaceExist(strUsr)) {
-                                Toast.makeText(ConfActivity.this, "ユーザ名:" + strUsr + "を登録", Toast.LENGTH_SHORT).show();
+                            if(!isSpaceExist(strUsrtmp)) {
+                                HttpGetTask task = new HttpGetTask();
+                                //URLを指定
+                                try {
+                                    task.setURL(new URL("http://40.74.135.223:8080/test/mainServlet?from=0&requestID=4&Username="+strUsr));
+                                } catch (MalformedURLException e) {
+                                    e.printStackTrace();
+                                }
+                                //http通信スレッドを立てる
+                                Thread thread = new Thread(task);
+                                //立てたスレッドを起動
+                                thread.start();
+                                try {
+                                    //http通信が完了するまでメインスレッドを停止する
+                                    thread.join();
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                System.out.println(taskText);
+                                String checkUsrName=htmlTagRemover(brReplacer(taskText));
+                                if(checkUsrName.equals("true")){
+                                    strUsr=strUsrtmp;
+                                    Toast.makeText(ConfActivity.this, "ユーザ名:" + strUsr + "を登録", Toast.LENGTH_SHORT).show();
+                                }else{
+                                    Toast.makeText(ConfActivity.this, "既にそのユーザ名は登録されています。別のユーザ名を入力してください。", Toast.LENGTH_SHORT).show();
+                                }
                             }else{//ユーザ名が空白なら
                                 Toast.makeText(ConfActivity.this, "空白は登録できません", Toast.LENGTH_SHORT).show();
                                 //元のユーザ名を取得
-                                strUsr=strUsrtmp;
+                                //strUsr=strUsrtmp;
                             }
-                        }else{//全角なら
+                        }
+                        /*else{//全角なら
                             Toast.makeText( ConfActivity.this, "全角文字が含まれているので登録できませんでした", Toast.LENGTH_SHORT).show();
                             //元のユーザ名を取得
                             strUsr=strUsrtmp;
-                        }
+                        }*/
                     }
                 });
                 //キャンセルボタンとそれのコールバックを記述
@@ -186,11 +245,11 @@ public class ConfActivity extends AppCompatActivity implements View.OnClickListe
                 builder.create().show();
                 /*Toast toast = Toast.makeText(ConfActivity.this,"ボタンが押されたよ",Toast.LENGTH_LONG);
                 toast.show(); //デバッグ用のトースト*/
+
             }else{
                 Toast toast = Toast.makeText(ConfActivity.this,"一度決めたユーザ名は変更できません",Toast.LENGTH_LONG);
                 toast.show();
             }
-
         }
 
     }
@@ -214,6 +273,48 @@ public class ConfActivity extends AppCompatActivity implements View.OnClickListe
                 return true;
         }
         return false;
+    }
+
+    static String htmlTagRemover(String str){
+        return str.replaceAll("<.+?>","");
+    }
+
+    static String brReplacer(String str){
+        return str.replaceAll("<br.+?",",");
+    }
+
+    //http通信用クラス
+    public class HttpGetTask implements Runnable {
+
+        private URL url;
+
+        public void setURL(URL url1) {
+            url = url1;
+        }
+
+        @Override
+        public void run() {
+            final StringBuilder result = new StringBuilder();
+            try {
+                //URL url = new URL("http://www.drk7.jp/weather/xml/27.xml");
+                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                taskText = InputStreamToString(con.getInputStream());
+                Log.d("HTTP", taskText);
+            } catch (Exception ex) {
+                System.out.println(ex);
+            }
+        }
+    }
+
+    static String InputStreamToString(InputStream is) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(is));
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while ((line = br.readLine()) != null) {
+            sb.append(line);
+        }
+        br.close();
+        return sb.toString();
     }
 
     @Override

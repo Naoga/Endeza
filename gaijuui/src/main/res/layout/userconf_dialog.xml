@@ -7,11 +7,11 @@
     android:orientation="vertical"
     android:padding="10dp">
 
-    <TextView
+    <!--<TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="○入力は半角英数字のみです"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal" />-->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

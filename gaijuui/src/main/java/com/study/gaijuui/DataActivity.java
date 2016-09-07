@@ -39,7 +39,7 @@ public class DataActivity extends AppCompatActivity implements View.OnClickListe
     private BarChart mBarChart;
     int month;
     String strUsrfg;
-    String barGraphData,taskText,pictData;
+    String barGraphData,pictData,taskText;
     private Button mtoPict;
     int num[]=new int[12];
 
@@ -105,6 +105,7 @@ public class DataActivity extends AppCompatActivity implements View.OnClickListe
                 e.printStackTrace();
             }
             System.out.println(taskText);
+            //task.getTaskText(pictData);
             pictData=htmlTagRemover(brReplacer(taskText));
             Intent intent = new Intent(this,Activity_GaijuPict.class);
             intent.putExtra("month",month);

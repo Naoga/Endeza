@@ -17,6 +17,57 @@ import java.net.URL;
  * Created by Naoga on 2016/08/01.
  */
 
+
+
+
+
+public class HttpGetTask implements Runnable {
+
+    private URL url;
+    String taskText,text;
+
+    public void setURL(URL url1) {
+        url = url1;
+    }
+
+    String getTaskText(String str){
+        text=str;
+        text=htmlTagRemover(brReplacer(taskText));
+        return text;
+    }
+
+    @Override
+    public void run() {
+        //final StringBuilder result = new StringBuilder();
+        try {
+            //URL url = new URL("http://www.drk7.jp/weather/xml/27.xml");
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            taskText = InputStreamToString(con.getInputStream());
+            Log.d("HTTP", taskText);
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+    }
+
+    static String InputStreamToString(InputStream is) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(is));
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while ((line = br.readLine()) != null) {
+            sb.append(line);
+        }
+        br.close();
+        return sb.toString();
+    }
+
+    static String htmlTagRemover(String str){
+        return str.replaceAll("<.+?>","");
+    }
+
+    static String brReplacer(String str){
+        return str.replaceAll("<br.+?",",");
+    }
+}
 /*public class HttpGetTask extends AsyncTask<URL,Void,String> {
     @Override
     protected String doInBackground(URL... urls) {
