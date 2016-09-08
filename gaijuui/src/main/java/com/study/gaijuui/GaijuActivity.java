@@ -56,7 +56,7 @@ public class GaijuActivity extends Activity implements View.OnClickListener {
     boolean tgsw_flagsave;
     //ユーザ名の初期値はnull
     String userName = null;
-    String taskText;
+    //String taskText;
     String barGraphData,pictTmp;
     String[] notifArray=new String[2];
     int count=0;
@@ -79,6 +79,9 @@ public class GaijuActivity extends Activity implements View.OnClickListener {
         //userName=intent.getStringExtra("strUsr");
 
         routinHttpConFlag=intent.getIntExtra("routinHttpConFlag",0);
+
+        pictTmp=intent.getStringExtra("pictTmp");
+
         notifArray[1]="";
         //指定時間間隔で実行
         Timer timer1=new Timer();
@@ -211,13 +214,14 @@ public class GaijuActivity extends Activity implements View.OnClickListener {
             }*/
 
             //mTestText.setText("button push");　buttonデバッグ用
-            System.out.println(taskText);
+            //System.out.println(taskText);
             //task.getTaskText(barGraphData);
-            barGraphData=htmlTagRemover(brReplacer(taskText));
+            barGraphData=task.getTaskText();
             //グラフ画面へのインテントを生成
             Intent intent = new Intent(this, DataActivity.class);
             intent.putExtra("strUsrfg", userName);
             intent.putExtra("barGraphData", barGraphData);
+            intent.putExtra("pictTmp",pictTmp);
             //データ画面へと遷移
             startActivity(intent);
         } else if (v.equals(mBut_Conf)) {//設定ボタンが押されたときの動作
@@ -231,6 +235,7 @@ public class GaijuActivity extends Activity implements View.OnClickListener {
             intent.putExtra("tgsw_flagsave", tgsw_flagsave);
             intent.putExtra("strUsr", userName);
             intent.putExtra("routinHttpConFlag",routinHttpConFlag);
+            intent.putExtra("pictTmp",pictTmp);
             //遷移する
             startActivity(intent);
         } else if (v.equals(mButton)) {
@@ -257,7 +262,7 @@ public class GaijuActivity extends Activity implements View.OnClickListener {
     }
 
     //取得文字列をStringに変換する関数
-    static String InputStreamToString(InputStream is) throws IOException {
+    /*static String InputStreamToString(InputStream is) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
         StringBuilder sb = new StringBuilder();
         String line;
@@ -297,7 +302,7 @@ public class GaijuActivity extends Activity implements View.OnClickListener {
                 System.out.println(ex);
             }
         }
-    }
+    }*/
 
     //定期通信用クラス
     //HttpGetTaskインスタンスを生成しhttp通信を行う
@@ -326,7 +331,8 @@ public class GaijuActivity extends Activity implements View.OnClickListener {
             }
             //System.out.println(taskText);
 
-            String notifText=htmlTagRemover(brReplacer(taskText));
+            //String notifText=htmlTagRemover(brReplacer(taskText));
+            String notifText=task_t.getTaskText();
             /*String notifText="";
             task_t.getTaskText(notifText);*/
             pictTmp=notifArray[1];

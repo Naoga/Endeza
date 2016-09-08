@@ -1,11 +1,13 @@
 package com.study.gaijuui;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Layout;
@@ -28,8 +30,12 @@ import com.beardedhen.androidbootstrap.api.defaults.DefaultBootstrapBrand;
 import com.beardedhen.androidbootstrap.api.defaults.DefaultBootstrapSize;
 import com.beardedhen.androidbootstrap.font.FontAwesome;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.zip.Inflater;
 
@@ -42,7 +48,7 @@ public class Activity_GaijuPict extends AppCompatActivity implements View.OnClic
     int month,buttonNum;
     int imageWidth=500,imageHeight=500,layoutWidth=500,layoutHeight=500;
     int num[]=new int[12];
-    String strUsrtp,barGraphData,pictData;
+    String strUsrtp,barGraphData,pictData,taskText,pictTmp;
     String str;
     final int WC=ViewGroup.LayoutParams.WRAP_CONTENT;
     final int MP=ViewGroup.LayoutParams.MATCH_PARENT;
@@ -63,6 +69,7 @@ public class Activity_GaijuPict extends AppCompatActivity implements View.OnClic
         strUsrtp=intent.getStringExtra("strUsrtp");
         barGraphData=intent.getStringExtra("barGraphData");
         pictData=intent.getStringExtra("pictData");
+        pictTmp=intent.getStringExtra("pictTmp");
         System.out.println(pictData);
         String[] pictDataArray=pictData.split(",",0);
         /*String[] pictDateData=new String[pictDataArray.length];
@@ -143,21 +150,21 @@ public class Activity_GaijuPict extends AppCompatActivity implements View.OnClic
         }*/
         initLayout();
         buttonNum=pictDataArray.length/2;
-        btn=new Button[buttonNum];
-        for(int i=0;i<buttonNum;i++) {
-            btn[i] = new Button(this);
-            btn[i].setOnClickListener(this);
+        if(buttonNum!=0) {
+            btn = new Button[buttonNum];
+            for (int i = 0; i < buttonNum; i++) {
+                btn[i] = new Button(this);
+                btn[i].setOnClickListener(this);
+            }
+            for (int i = 0, j = 0; i < pictDataArray.length; i++, j++) {
+                createLayoutPict();
+                initPict();
+                //uri=Uri.parse("http://inoshishi.etc64.com/image/inoshishi04.jpg");
+                uri = Uri.parse(pictDataArray[i + 1]);
+                setText(pictDataArray[i++], btn[j], layout_pict);
+                pictSet(uri, img, layoutPictParams, layout_pict);
+            }
         }
-        for(int i=0,j=0;i<pictDataArray.length;i++,j++){
-            createLayoutPict();
-            initPict();
-            //uri=Uri.parse("http://inoshishi.etc64.com/image/inoshishi04.jpg");
-            uri=Uri.parse(pictDataArray[i+1]);
-            setText(pictDataArray[i++],btn[j],layout_pict);
-            pictSet(uri,img,layoutPictParams,layout_pict);
-        }
-
-
         //ImageView img2=(ImageView)findViewById(R.id.picttest2);
         /*ImageView img2=new ImageView(this);
         try {
@@ -208,11 +215,55 @@ public class Activity_GaijuPict extends AppCompatActivity implements View.OnClic
             intent.putExtra("month",month);
             intent.putExtra("strUsrfg",strUsrtp);
             intent.putExtra("barGraphData",barGraphData);
+            intent.putExtra("pictTmp",pictTmp);
             startActivity(intent);
         }
         for(int i=0;i<buttonNum;i++){
-            if(v.equals(btn[i]))
-                Toast.makeText(Activity_GaijuPict.this, btn[i].getText().toString(), Toast.LENGTH_SHORT).show();
+            if(v.equals(btn[i])) {
+                //URLを指定
+                String dateTime=btn[i].getText().toString();
+                final String[] dateTimeArray=dateTime.split("[\\s]+",0);
+                System.out.println(dateTimeArray[0]);
+                System.out.println(dateTimeArray[1]);
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(Activity_GaijuPict.this);
+                alertDialog.setTitle("注意!!");
+                alertDialog.setMessage(dateTimeArray[1]+"の写真を消してもいいですか？");
+                alertDialog.setPositiveButton("消去する", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        final HttpGetTask task = new HttpGetTask();
+                        try {
+                            task.setURL(new URL("http://40.74.135.223:8080/test/mainServlet?from=0&requestID=3&Username=test&Date="+dateTimeArray[0]+"&Time="+dateTimeArray[1]));
+                        } catch (MalformedURLException e) {
+                            e.printStackTrace();
+                        }
+                        //http通信スレッドを立てる
+                        Thread thread = new Thread(task);
+                        //立てたスレッドを起動
+                        thread.start();
+                        try {
+                            //http通信が完了するまでメインスレッドを停止する
+                            thread.join();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        System.out.println(taskText);
+                        if(task.getTaskText().equals("true"))
+                            Toast.makeText(Activity_GaijuPict.this,"消去に成功しました",Toast.LENGTH_SHORT).show();
+                        else
+                            Toast.makeText(Activity_GaijuPict.this,"消去に失敗しました",Toast.LENGTH_SHORT).show();
+                    }
+                });
+                alertDialog.setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(Activity_GaijuPict.this,"キャンセルしました",Toast.LENGTH_SHORT).show();
+                    }
+                });
+                //task.getTaskText(pictData);
+                //Toast.makeText(Activity_GaijuPict.this, btn[i].getText().toString(), Toast.LENGTH_SHORT).show();
+                alertDialog.create().show();
+            }
         }
     }
 
@@ -256,5 +307,45 @@ public class Activity_GaijuPict extends AppCompatActivity implements View.OnClic
         layout_root.addView(layout);
     }
 
+    /*static String InputStreamToString(InputStream is) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(is));
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while ((line = br.readLine()) != null) {
+            sb.append(line);
+        }
+        br.close();
+        return sb.toString();
+    }
 
+    static String htmlTagRemover(String str){
+        return str.replaceAll("<.+?>","");
+    }
+
+    static String brReplacer(String str){
+        return str.replaceAll("<br.+?",",");
+    }
+
+    //http通信用クラス
+    public class HttpGetTask implements Runnable {
+
+        private URL url;
+
+        public void setURL(URL url1) {
+            url = url1;
+        }
+
+        @Override
+        public void run() {
+            final StringBuilder result = new StringBuilder();
+            try {
+                //URL url = new URL("http://www.drk7.jp/weather/xml/27.xml");
+                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                taskText = InputStreamToString(con.getInputStream());
+                //Log.d("HTTP", taskText);
+            } catch (Exception ex) {
+                System.out.println(ex);
+            }
+        }
+    }*/
 }

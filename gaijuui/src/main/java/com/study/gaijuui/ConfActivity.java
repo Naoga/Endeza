@@ -46,7 +46,8 @@ public class ConfActivity extends AppCompatActivity implements View.OnClickListe
     boolean tgsw_flagnotice=true;
     boolean tgsw_flagsave;
     //ユーザ名登録用フィールド
-    String strUsr,strUsrtmp,taskText;
+    String strUsr,strUsrtmp,pictTmp;
+    //String taskText;
     int routinHttpConFlag;
 
 
@@ -64,6 +65,7 @@ public class ConfActivity extends AppCompatActivity implements View.OnClickListe
         strUsr=intent.getStringExtra("strUsr");
 
         routinHttpConFlag=intent.getIntExtra("routinHttpConFlag",routinHttpConFlag);
+        pictTmp=intent.getStringExtra("pictTmp");
 
         //各メンバ変数を各ウィジェット用にキャスト
         mBut_TopFromConf=(BootstrapButton) findViewById(R.id.but_topfromconf);
@@ -106,6 +108,7 @@ public class ConfActivity extends AppCompatActivity implements View.OnClickListe
             intent.putExtra("tgsw_flagsave",tgsw_flagsave);
             intent.putExtra("strUsr",strUsr);
             intent.putExtra("routinHttpConFlag",routinHttpConFlag);
+            intent.putExtra("pictTmp",pictTmp);
             //画面遷移
             startActivity(intent);
         }
@@ -146,8 +149,8 @@ public class ConfActivity extends AppCompatActivity implements View.OnClickListe
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    System.out.println(taskText);
-                    String checkRemove=htmlTagRemover(brReplacer(taskText));
+                    //System.out.println(taskText);
+                    String checkRemove=task.getTaskText();
 
                     //通知バナーの生成
                     Toast toast = Toast.makeText(ConfActivity.this,"写真を消去しました",Toast.LENGTH_LONG);
@@ -182,58 +185,57 @@ public class ConfActivity extends AppCompatActivity implements View.OnClickListe
                 builder.setView(layout);
                 //OKボタンと、それのコールバックを記述
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //現ユーザ名を退避
-                        //strUsrtmp=strUsr;
-                        //ユーザが入力するフォームを生成
-                        EditText userName=(EditText)layout.findViewById(R.id.username);
-                        //String strUser=userName.set
-                        //userName.setText(strUsr);
-                        //ユーザが入力したユーザ名を取得
-                        strUsrtmp=userName.getText().toString();
-                        //全角半角確認
-                        if(isHalfAlphanum(strUsrtmp)){
-                            //正常入力なら(半角かつ空白でない)
-                            if(!isSpaceExist(strUsrtmp)) {
-                                HttpGetTask task = new HttpGetTask();
-                                //URLを指定
-                                try {
-                                    task.setURL(new URL("http://40.74.135.223:8080/test/mainServlet?from=0&requestID=4&Username="+strUsr));
-                                } catch (MalformedURLException e) {
-                                    e.printStackTrace();
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //現ユーザ名を退避
+                                //strUsrtmp=strUsr;
+                                //ユーザが入力するフォームを生成
+                                EditText userName = (EditText) layout.findViewById(R.id.username);
+                                //String strUser=userName.set
+                                //userName.setText(strUsr);
+                                //ユーザが入力したユーザ名を取得
+                                strUsrtmp = userName.getText().toString();
+                                System.out.println(strUsrtmp);
+                                //正常入力なら(半角かつ空白でない)
+                                if (!isSpaceExist(strUsrtmp)) {
+                                    HttpGetTask task = new HttpGetTask();
+                                    //URLを指定
+                                    try {
+                                        task.setURL(new URL("http://40.74.135.223:8080/test/mainServlet?from=0&requestID=4&Username=" + strUsrtmp));
+                                    } catch (MalformedURLException e) {
+                                        e.printStackTrace();
+                                    }
+                                    //http通信スレッドを立てる
+                                    Thread thread = new Thread(task);
+                                    //立てたスレッドを起動
+                                    thread.start();
+                                    try {
+                                        //http通信が完了するまでメインスレッドを停止する
+                                        thread.join();
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+                                    //System.out.println(taskText);
+                                    String checkUsrName = task.getTaskText();
+                                    System.out.println(checkUsrName);
+                                    if (checkUsrName.equals("true,")) {
+                                        strUsr = strUsrtmp;
+                                        Toast.makeText(ConfActivity.this, "ユーザ名:" + strUsr + "を登録", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(ConfActivity.this, "既にそのユーザ名は登録されています。別のユーザ名を入力してください。", Toast.LENGTH_SHORT).show();
+                                    }
+                                } else {//ユーザ名が空白なら
+                                    Toast.makeText(ConfActivity.this, "空白は登録できません", Toast.LENGTH_SHORT).show();
+                                    //元のユーザ名を取得
+                                    //strUsr=strUsrtmp;
                                 }
-                                //http通信スレッドを立てる
-                                Thread thread = new Thread(task);
-                                //立てたスレッドを起動
-                                thread.start();
-                                try {
-                                    //http通信が完了するまでメインスレッドを停止する
-                                    thread.join();
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                                System.out.println(taskText);
-                                String checkUsrName=htmlTagRemover(brReplacer(taskText));
-                                if(checkUsrName.equals("true")){
-                                    strUsr=strUsrtmp;
-                                    Toast.makeText(ConfActivity.this, "ユーザ名:" + strUsr + "を登録", Toast.LENGTH_SHORT).show();
-                                }else{
-                                    Toast.makeText(ConfActivity.this, "既にそのユーザ名は登録されています。別のユーザ名を入力してください。", Toast.LENGTH_SHORT).show();
-                                }
-                            }else{//ユーザ名が空白なら
-                                Toast.makeText(ConfActivity.this, "空白は登録できません", Toast.LENGTH_SHORT).show();
-                                //元のユーザ名を取得
-                                //strUsr=strUsrtmp;
                             }
-                        }
                         /*else{//全角なら
                             Toast.makeText( ConfActivity.this, "全角文字が含まれているので登録できませんでした", Toast.LENGTH_SHORT).show();
                             //元のユーザ名を取得
                             strUsr=strUsrtmp;
                         }*/
-                    }
-                });
+                        });
                 //キャンセルボタンとそれのコールバックを記述
                 builder.setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {
                     @Override
@@ -275,7 +277,7 @@ public class ConfActivity extends AppCompatActivity implements View.OnClickListe
         return false;
     }
 
-    static String htmlTagRemover(String str){
+    /*static String htmlTagRemover(String str){
         return str.replaceAll("<.+?>","");
     }
 
@@ -315,7 +317,7 @@ public class ConfActivity extends AppCompatActivity implements View.OnClickListe
         }
         br.close();
         return sb.toString();
-    }
+    }*/
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

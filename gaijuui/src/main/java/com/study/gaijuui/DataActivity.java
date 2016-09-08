@@ -39,7 +39,8 @@ public class DataActivity extends AppCompatActivity implements View.OnClickListe
     private BarChart mBarChart;
     int month;
     String strUsrfg;
-    String barGraphData,pictData,taskText;
+    String barGraphData,pictData,pictTmp;
+    //String taskText;
     private Button mtoPict;
     int num[]=new int[12];
 
@@ -51,6 +52,7 @@ public class DataActivity extends AppCompatActivity implements View.OnClickListe
         strUsrfg=intent.getStringExtra("strUsrfg");
         barGraphData=intent.getStringExtra("barGraphData");
         System.out.println(barGraphData);
+        pictTmp=intent.getStringExtra("pictTmp");
         //String barGraphDataArray[];
         String[] barGraphDataArray=barGraphData.split(",",0);
         for(int i=0;i<barGraphDataArray.length;i++) {
@@ -104,9 +106,10 @@ public class DataActivity extends AppCompatActivity implements View.OnClickListe
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            System.out.println(taskText);
+            //System.out.println(taskText);
             //task.getTaskText(pictData);
-            pictData=htmlTagRemover(brReplacer(taskText));
+            pictData=task.getTaskText();
+            System.out.println(pictData);
             Intent intent = new Intent(this,Activity_GaijuPict.class);
             intent.putExtra("month",month);
             intent.putExtra("strUsrtp",strUsrfg);
@@ -212,7 +215,7 @@ public class DataActivity extends AppCompatActivity implements View.OnClickListe
         onClick(view);
     }
 
-    static String InputStreamToString(InputStream is) throws IOException {
+    /*static String InputStreamToString(InputStream is) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
         StringBuilder sb = new StringBuilder();
         String line;
@@ -252,5 +255,5 @@ public class DataActivity extends AppCompatActivity implements View.OnClickListe
                 System.out.println(ex);
             }
         }
-    }
+    }*/
 }

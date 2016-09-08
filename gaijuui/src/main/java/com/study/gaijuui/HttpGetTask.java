@@ -24,16 +24,14 @@ import java.net.URL;
 public class HttpGetTask implements Runnable {
 
     private URL url;
-    String taskText,text;
+    String taskText;
 
     public void setURL(URL url1) {
         url = url1;
     }
 
-    String getTaskText(String str){
-        text=str;
-        text=htmlTagRemover(brReplacer(taskText));
-        return text;
+    String getTaskText(){
+        return htmlTagRemover(brReplacer(taskText));
     }
 
     @Override
