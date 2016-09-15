@@ -7,12 +7,14 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="はたけまもる"
-        android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:supportsRtl="true">
+        <!--android:theme="@style/AppTheme">-->
+        <!--android:theme="@style/Theme.AppCompat">-->
         <activity
             android:name=".GaijuActivity"
             android:screenOrientation="portrait"
             android:label="はたけまもる"
+            android:exported="true"
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,11 +25,13 @@
         <activity
             android:name=".DataActivity"
             android:label="統計データ"
+            android:theme="@style/AppTheme"
             android:screenOrientation="landscape">
         </activity>
         <activity
             android:name=".ConfActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
             android:label="設定"></activity>
         <!--
  ATTENTION: This was auto-generated to add Google Play services to your project for
@@ -45,8 +49,24 @@
         <activity
             android:name=".Activity_GaijuPict"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
             android:label="害獣写真を表示">
         </activity>
-    </application>
 
+        <activity
+            android:name=".CallDialogActivity"
+            android:launchMode="singleInstance"
+            android:theme="@style/Translucent">
+            <!--android:theme="@android:style/Theme.Translucent.NoTitleBar"> android:theme="@style/Theme.AppCompat"-->
+        </activity>
+        <service
+            android:enabled="true"
+            android:name=".TimerIntentService" >
+        </service>
+        <receiver android:name=".TimerReceiver">
+            <intent-filter>
+                <action android:name="TIMER_FINISHED"/>
+            </intent-filter>
+        </receiver>
+    </application>
 </manifest>

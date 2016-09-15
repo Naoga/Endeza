@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -12,6 +13,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.app.NotificationCompat;
@@ -61,8 +63,13 @@ public class GaijuActivity extends Activity implements View.OnClickListener {
     String[] notifArray=new String[2];
     int count=0;
     int routinHttpConFlag;
+    int notifFlag;
+
+    static HttpGetTask task_t = new HttpGetTask();
 
     Handler handler = new Handler();
+
+    private final GaijuActivity self=this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,13 +86,15 @@ public class GaijuActivity extends Activity implements View.OnClickListener {
         //userName=intent.getStringExtra("strUsr");
 
         routinHttpConFlag=intent.getIntExtra("routinHttpConFlag",0);
-
+        //写真退避用文字列を取得
         pictTmp=intent.getStringExtra("pictTmp");
-
+        //初期値を与える
         notifArray[1]="";
-        //指定時間間隔で実行
-        Timer timer1=new Timer();
-        timer1.schedule(new RoutineHttpCon(),0,10000);
+        //routinHttpConFlag=1;
+        //定期通信用クラスのインスタンスを生成
+        Timer timer1 = new Timer();
+        //第3引数ミリ秒間隔で通信する
+        timer1.schedule(new RoutineHttpCon(), 0, 60000);
         /*String testText="<html><body>false<br>http://40.74.135.223/pic/3/3/1472012650971.jpg<br></body></html>";
         String tmpText=brReplacer(testText);
         String noHtmlText=htmlTagRemover(tmpText);
@@ -124,7 +133,7 @@ public class GaijuActivity extends Activity implements View.OnClickListener {
         //ロゴの出力
         ImageView imageView2 = (ImageView) findViewById(R.id.image_view_2);
         try {
-            InputStream istream = getResources().getAssets().open("hatake_logo.png");
+            InputStream istream = getResources().getAssets().open("hatakemamoru.jpg");
             Bitmap bitmap = BitmapFactory.decodeStream(istream);
             imageView2.setImageBitmap(bitmap);
         } catch (IOException e) {//例外(エラー)処理
@@ -153,10 +162,10 @@ public class GaijuActivity extends Activity implements View.OnClickListener {
         mBut_Data.setOnClickListener(this);
         mButton.setOnClickListener(this);
 
-        String test=mBut_Data.getText().toString();
-        System.out.println(test);
+        /*String test=mBut_Data.getText().toString();
+        System.out.println(test);*/
 
-        //ユーザ名の表示　※要改良(見た目)--最低限の表示のみ実装
+        //ユーザ名の表示
         if (userName == null) {
             mUsrtxt.setText("設定画面でユーザ名を\n入力してください");
         } else {
@@ -185,7 +194,7 @@ public class GaijuActivity extends Activity implements View.OnClickListener {
             //立てたスレッドを起動
             thread.start();
             try {
-                //http通信が完了するまでメインスレッドを停止する
+                //http通信が完了するまで待機する
                 thread.join();
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -216,10 +225,13 @@ public class GaijuActivity extends Activity implements View.OnClickListener {
             //mTestText.setText("button push");　buttonデバッグ用
             //System.out.println(taskText);
             //task.getTaskText(barGraphData);
+            //通信結果(グラフデータ)を取得
             barGraphData=task.getTaskText();
             //グラフ画面へのインテントを生成
             Intent intent = new Intent(this, DataActivity.class);
+            //遷移先へ持ち込むパラメータの指定
             intent.putExtra("strUsrfg", userName);
+            intent.putExtra("tgsw_flagnotice", tgsw_flagnotice);
             intent.putExtra("barGraphData", barGraphData);
             intent.putExtra("pictTmp",pictTmp);
             //データ画面へと遷移
@@ -238,13 +250,17 @@ public class GaijuActivity extends Activity implements View.OnClickListener {
             intent.putExtra("pictTmp",pictTmp);
             //遷移する
             startActivity(intent);
-        } else if (v.equals(mButton)) {
-            Toast toast = Toast.makeText(GaijuActivity.this, "button1が押されたよ", Toast.LENGTH_LONG);
-            toast.show();
-            notification();
+        } else if (v.equals(mButton)) {//デバッグ用ボタン
+            /*Toast toast = Toast.makeText(GaijuActivity.this, "button1が押されたよ", Toast.LENGTH_LONG);
+            toast.show();*/
+            if(tgsw_flagnotice==true) {
+                notification();
+                startService(new Intent(self, TimerIntentService.class));
+            }
         }
     }
 
+    //通知関数
     void notification() {
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         //クリックした時にintentを発行
@@ -254,10 +270,21 @@ public class GaijuActivity extends Activity implements View.OnClickListener {
                 .setSmallIcon(R.drawable.ic_hatake_web) // アイコン
                 .setTicker("Hello") // 通知バーに表示する簡易メッセージ
                 .setWhen(System.currentTimeMillis()) // 時間
-                .setContentTitle("My notification") // 展開メッセージのタイトル
-                .setContentText("Hello Notification!!") // 展開メッセージの詳細メッセージ
+                .setContentTitle("通知") // 展開メッセージのタイトル
+                .setContentText("害獣の出現を確認しました") // 展開メッセージの詳細メッセージ
+                .setDefaults(Notification.DEFAULT_ALL)
                 .setContentIntent(contentIntent) // PendingIntent
                 .build();
+        //ダイアログの実装
+        AlertDialog.Builder ab =new AlertDialog.Builder(GaijuActivity.this);
+        ab.setTitle("通知");
+        ab.setMessage("害獣の出現を確認しました");
+        ab.setPositiveButton("閉じる", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        //ab.create().show();
         notificationManager.notify(1, notification);
     }
 
@@ -309,13 +336,13 @@ public class GaijuActivity extends Activity implements View.OnClickListener {
     public class RoutineHttpCon extends TimerTask{
         @Override
         public void run() {
-            int notifFlag=0;
             count++;
             System.out.println(count+": Hello");
-            HttpGetTask task_t = new HttpGetTask();
+            //HttpGetTask task_t = new HttpGetTask();
             //URLを指定
             try {
                 task_t.setURL(new URL("http://40.74.135.223:8080/test/mainServlet?from=0&requestID=0&Username=test"));
+                //task_t.setURL(new URL("http://inoshishi.etc64.com/image/inoshishi04.jp"));
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
@@ -329,25 +356,29 @@ public class GaijuActivity extends Activity implements View.OnClickListener {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            //System.out.println(taskText);
-
-            //String notifText=htmlTagRemover(brReplacer(taskText));
+            //通信結果(通知の決定と写真URL)を取得
             String notifText=task_t.getTaskText();
-            /*String notifText="";
-            task_t.getTaskText(notifText);*/
-            pictTmp=notifArray[1];
+            //配列化
             notifArray=notifText.split(",",0);
             System.out.println(notifArray[0]);
             System.out.println(notifArray[1]);
-            if(notifArray[0].equals("true")) {
-                notifFlag = 1;
-                if (notifFlag == 1) {
-                    notification();
-                }
+            //サーバからの取得文字列がtrue・通知を設定しているなら
+            if(notifArray[0].equals("true") && tgsw_flagnotice==true) {
+                //notifFlag=1;
+                //ポップアップ、ダイアログ通知
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        notification();
+                        startService(new Intent(self,TimerIntentService.class));
+                    }
+                });
             }else{
-                notifArray[1]=pictTmp;
+                //退避した写真を戻す
+                //notifArray[1]=pictTmp;
             }
-
+            //写真表示
+            //notifArray[1] = "http://cdn-ak.f.st-hatena.com/images/fotolife/f/fjswkun/20150927/20150927140905.jpg";
             ImageView imageView1 = (ImageView) findViewById(R.id.image_view_1);
             Uri uri = Uri.parse(notifArray[1]);
             /*Uri uri;
@@ -359,6 +390,46 @@ public class GaijuActivity extends Activity implements View.OnClickListener {
             Uri.Builder builder = uri.buildUpon();
             HttpGetPict task_p = new HttpGetPict(imageView1);
             task_p.execute(builder);
+            //System.out.println(taskText);
+
+            //String notifText=htmlTagRemover(brReplacer(taskText));
+            /*String notifText=task_t.getTaskText();
+            /*String notifText="";
+            task_t.getTaskText(notifText);*/
+
+            //現状で表示している写真を退避
+            //pictTmp=notifArray[1];
+            //配列化
+            /*notifArray=notifText.split(",",0);
+            System.out.println(notifArray[0]);
+            System.out.println(notifArray[1]);
+            //サーバからの取得文字列がtrue・通知を設定しているなら
+            if(notifArray[0].equals("true") && tgsw_flagnotice==true) {
+                //notifFlag=1;
+                //ポップアップ、ダイアログ通知
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        notification();
+                    }
+                });
+            }else{
+                //退避した写真を戻す
+                //notifArray[1]=pictTmp;
+            }
+            //写真表示
+            //notifArray[1] = "http://cdn-ak.f.st-hatena.com/images/fotolife/f/fjswkun/20150927/20150927140905.jpg";
+            ImageView imageView1 = (ImageView) findViewById(R.id.image_view_1);
+            Uri uri = Uri.parse(notifArray[1]);
+            /*Uri uri;
+            if(count%2==0) {
+                uri = Uri.parse("http://inoshishi.etc64.com/image/inoshishi04.jpg");
+            }else{
+                uri=Uri.parse("");
+            }*/
+            /*Uri.Builder builder = uri.buildUpon();
+            HttpGetPict task_p = new HttpGetPict(imageView1);
+            task_p.execute(builder);*/
         }
     }
             /*handler.post(new Runnable() {

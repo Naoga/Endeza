@@ -40,6 +40,7 @@ public class DataActivity extends AppCompatActivity implements View.OnClickListe
     int month;
     String strUsrfg;
     String barGraphData,pictData,pictTmp;
+    boolean tgsw_flagnotice;
     //String taskText;
     private Button mtoPict;
     int num[]=new int[12];
@@ -47,14 +48,20 @@ public class DataActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //レイアウトファイルを貼付
         setContentView(R.layout.dataactivity);
+        //インテントを発行
         Intent intent=getIntent();
+        //遷移元からのパラメータを取得
         strUsrfg=intent.getStringExtra("strUsrfg");
+        tgsw_flagnotice=intent.getBooleanExtra("tgsw_flagnotice",true);
         barGraphData=intent.getStringExtra("barGraphData");
         System.out.println(barGraphData);
         pictTmp=intent.getStringExtra("pictTmp");
         //String barGraphDataArray[];
+        //グラフデータを配列化
         String[] barGraphDataArray=barGraphData.split(",",0);
+        //グラフパラメータとして格納
         for(int i=0;i<barGraphDataArray.length;i++) {
             num[i] = Integer.parseInt(barGraphDataArray[i]);
         }
@@ -75,6 +82,7 @@ public class DataActivity extends AppCompatActivity implements View.OnClickListe
         //メンバ変数を棒グラフ用にキャスト
         mBarChart = (BarChart) findViewById(R.id.bar_chart);
         mBarChart.setOnChartValueSelectedListener(this);
+        //mBarChart.setOnLongClickListener((View.OnLongClickListener) this);
         //グラフの初期設定
         createChart();
         //グラフデータをセット
@@ -85,14 +93,17 @@ public class DataActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         if (v.equals(mBut_TopFromData)) {//トップページへ戻る際
             Intent intent = new Intent(this, GaijuActivity.class);//トップページへのインテントの生成
+            //遷移先へ持ち込むパラメータを指定
             intent.putExtra("strUsr",strUsrfg);
+            intent.putExtra("tgsw_flagnotice",tgsw_flagnotice);
             startActivity(intent);//画面遷移
         }
-        else if(v.equals(mtoPict)){
+        else if(v.equals(mtoPict)){//月別詳細表示画面へ
+            //http通信用クラスのインスタンスを生成
             HttpGetTask task = new HttpGetTask();
             //URLを指定
             try {
-                task.setURL(new URL("http://40.74.135.223:8080/test/mainServlet?from=0&requestID=2&Username=test&month="+month));
+                task.setURL(new URL("http://40.74.135.223:8080/test/mainServlet?from=0&requestID=2&Username=test"+"&month="+month));
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
@@ -108,21 +119,26 @@ public class DataActivity extends AppCompatActivity implements View.OnClickListe
             }
             //System.out.println(taskText);
             //task.getTaskText(pictData);
+            //月別写真表示用文字列の取得
             pictData=task.getTaskText();
             System.out.println(pictData);
+            //画面遷移先を設定
             Intent intent = new Intent(this,Activity_GaijuPict.class);
+            //遷移先へ持ち込む値を設定
             intent.putExtra("month",month);
             intent.putExtra("strUsrtp",strUsrfg);
+            intent.putExtra("tgsw_flagnotice",tgsw_flagnotice);
             //intent.putExtra("num",num);
             intent.putExtra("barGraphData",barGraphData);
             intent.putExtra("pictData",pictData);
+            //画面遷移実行
             startActivity(intent);
         }
     }
 
     void createChart() {
         //グラフへのコメント
-        //mBarChart.setDescription("ここに説明が表示される");
+        mBarChart.setDescription("");
         //グラフの縦軸設定(左側のみ表示)
         mBarChart.getAxisRight().setEnabled(false);
         mBarChart.getAxisLeft().setEnabled(true);
@@ -141,7 +157,7 @@ public class DataActivity extends AppCompatActivity implements View.OnClickListe
 
         mBarChart.setScaleEnabled(true);
         //ラインの凡例の設定
-        mBarChart.getLegend().setEnabled(true);
+        mBarChart.getLegend().setEnabled(false);
 
         //X軸の設定
         XAxis xAxis = mBarChart.getXAxis();
@@ -173,7 +189,7 @@ public class DataActivity extends AppCompatActivity implements View.OnClickListe
             xValues.add(s);
         }
 
-        //value(テスト用・静的な値)
+        //value
         ArrayList<BarEntry> values = new ArrayList<>();
         for(int i=0;i<12;i++) {
             values.add(new BarEntry(num[i],i));//BarEntry(Val,Pos)
@@ -192,14 +208,23 @@ public class DataActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
+    //棒グラフをタップした際のコールバック関数
     public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
+        //月を取得
         month=e.getXIndex()+1;
+        //ダイアログの生成
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         alertDialog.setTitle(month+"月ごとの害獣写真の一覧を見ますか?");
         alertDialog.setPositiveButton("はい", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                intent_exe(mtoPict);
+                intent_exe(mtoPict);//画面遷移を実行
+            }
+        });
+        alertDialog.setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //何もしない
             }
         });
         alertDialog.create().show();
@@ -207,13 +232,14 @@ public class DataActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
+    //デフォルトでは何も動作させない
     public void onNothingSelected() {
 
     }
 
     void intent_exe(View view){
         onClick(view);
-    }
+    }//onclick関数を実行する
 
     /*static String InputStreamToString(InputStream is) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(is));

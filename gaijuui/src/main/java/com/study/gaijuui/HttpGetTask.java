@@ -20,16 +20,16 @@ import java.net.URL;
 
 
 
-
+//http通信用クラス
 public class HttpGetTask implements Runnable {
 
     private URL url;
     String taskText;
-
+    //URLのセッタ
     public void setURL(URL url1) {
         url = url1;
     }
-
+    //通信結果の取得
     String getTaskText(){
         return htmlTagRemover(brReplacer(taskText));
     }
@@ -39,14 +39,18 @@ public class HttpGetTask implements Runnable {
         //final StringBuilder result = new StringBuilder();
         try {
             //URL url = new URL("http://www.drk7.jp/weather/xml/27.xml");
+            //コネクションの確保
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            //ストリームから文字列型へ変換して格納
             taskText = InputStreamToString(con.getInputStream());
+            //ログの出力
             Log.d("HTTP", taskText);
         } catch (Exception ex) {
             System.out.println(ex);
         }
     }
 
+    //ストリームから文字列へ変換するメソッド
     static String InputStreamToString(InputStream is) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
         StringBuilder sb = new StringBuilder();
@@ -57,11 +61,11 @@ public class HttpGetTask implements Runnable {
         br.close();
         return sb.toString();
     }
-
+    //htmlタグを消去するメソッド
     static String htmlTagRemover(String str){
         return str.replaceAll("<.+?>","");
     }
-
+    //<br>を「,」に変換するメソッド
     static String brReplacer(String str){
         return str.replaceAll("<br.+?",",");
     }

@@ -52,6 +52,7 @@ public class Activity_GaijuPict extends AppCompatActivity implements View.OnClic
     String str;
     final int WC=ViewGroup.LayoutParams.WRAP_CONTENT;
     final int MP=ViewGroup.LayoutParams.MATCH_PARENT;
+    boolean tgsw_flagnotice;
     ScrollView scrollView;
     LinearLayout layout_root,layout_pict;
     TextView tv;
@@ -64,13 +65,17 @@ public class Activity_GaijuPict extends AppCompatActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_gaiju_pict);
+        //インテントを取得
         Intent intent=getIntent();
+        //遷移元からのパラメータを取得
         month=intent.getIntExtra("month",0);
         strUsrtp=intent.getStringExtra("strUsrtp");
         barGraphData=intent.getStringExtra("barGraphData");
         pictData=intent.getStringExtra("pictData");
         pictTmp=intent.getStringExtra("pictTmp");
+        tgsw_flagnotice=intent.getBooleanExtra("tgsw_flagnotice",true);
         System.out.println(pictData);
+        //写真データを配列化
         String[] pictDataArray=pictData.split(",",0);
         /*String[] pictDateData=new String[pictDataArray.length];
         String[] pictUrlData=new String[pictDataArray.length];
@@ -148,20 +153,29 @@ public class Activity_GaijuPict extends AppCompatActivity implements View.OnClic
         } catch (IOException e) {//例外(エラー)処理
             Log.d("Asetts", "Error");
         }*/
+        //レイアウトの初期設定
         initLayout();
+        //生成するボタンの数を取得
         buttonNum=pictDataArray.length/2;
+        //その月の写真の数が0枚でなければ
         if(buttonNum!=0) {
+            //ボタンを生成しコールバック用リスナに登録する
             btn = new Button[buttonNum];
             for (int i = 0; i < buttonNum; i++) {
                 btn[i] = new Button(this);
                 btn[i].setOnClickListener(this);
             }
             for (int i = 0, j = 0; i < pictDataArray.length; i++, j++) {
+                //写真とボタンを表示するリニアレイアウトを生成
                 createLayoutPict();
+                //写真表示用の初期設定
                 initPict();
                 //uri=Uri.parse("http://inoshishi.etc64.com/image/inoshishi04.jpg");
+                //uriを設定
                 uri = Uri.parse(pictDataArray[i + 1]);
+                //ボタンを表示
                 setText(pictDataArray[i++], btn[j], layout_pict);
+                //写真を表示
                 pictSet(uri, img, layoutPictParams, layout_pict);
             }
         }
@@ -191,7 +205,9 @@ public class Activity_GaijuPict extends AppCompatActivity implements View.OnClic
         /*buttonWidth=500;
         buttonHeight=100;
         LinearLayout.LayoutParams layoutButtonParams=new LinearLayout.LayoutParams(500,500);*/
+        //メンバ変数をウィジェットにキャスト
         mtoBarData=(BootstrapButton)findViewById(R.id.toBarData);
+        //棒グラフ画面へと戻るボタンの設定
         mtoBarData=new BootstrapButton(this);
         mtoBarData.setBootstrapSize(DefaultBootstrapSize.XL);
         mtoBarData.setBootstrapBrand(DefaultBootstrapBrand.INFO);
@@ -201,39 +217,62 @@ public class Activity_GaijuPict extends AppCompatActivity implements View.OnClic
         mtoBarData.setBootstrapText(bootstrapText);
         mtoBarData.setOnClickListener(this);
         mtoBarData.setLayoutParams(new LinearLayout.LayoutParams(WC,WC));
+        mtoBarData.setGravity(Gravity.BOTTOM);
+        //画面へadd
         layout_root.addView(mtoBarData);
-
+        //スクロール画面へadd
         scrollView.addView(layout_root);
-
+        //レイアウトとしてスクロールビューをセット
         setContentView(scrollView);
     }
 
     @Override
     public void onClick(View v) {
-        if(v.equals(mtoBarData)){
+        if(v.equals(mtoBarData)){//棒グラフ画面へ戻るボタンが押されたら
+            //インテントを発行
+            HttpGetTask task =new HttpGetTask();
+            try {
+                task.setURL(new URL("http://40.74.135.223:8080/test/mainServlet?from=0&requestID=1&Username=test"));
+            }catch(MalformedURLException e){
+                e.printStackTrace();
+            }
+            Thread thread = new Thread(task);
+            thread.start();
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            barGraphData=task.getTaskText();
             Intent intent=new Intent(this,DataActivity.class);
+            //遷移先へ持ち込むパラメータの指定
             intent.putExtra("month",month);
             intent.putExtra("strUsrfg",strUsrtp);
             intent.putExtra("barGraphData",barGraphData);
             intent.putExtra("pictTmp",pictTmp);
+            intent.putExtra("tgsw_flagnotice",tgsw_flagnotice);
+            //遷移を実行
             startActivity(intent);
         }
         for(int i=0;i<buttonNum;i++){
-            if(v.equals(btn[i])) {
-                //URLを指定
+            if(v.equals(btn[i])) {//一件削除ボタンが押されたら
+                //ボタンに表示されている日時を取得
                 String dateTime=btn[i].getText().toString();
+                //日付と時刻に分ける
                 final String[] dateTimeArray=dateTime.split("[\\s]+",0);
                 System.out.println(dateTimeArray[0]);
                 System.out.println(dateTimeArray[1]);
+                //ダイアログの生成
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(Activity_GaijuPict.this);
                 alertDialog.setTitle("注意!!");
                 alertDialog.setMessage(dateTimeArray[1]+"の写真を消してもいいですか？");
                 alertDialog.setPositiveButton("消去する", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        //http通信用クラスのインスタンスを生成
                         final HttpGetTask task = new HttpGetTask();
                         try {
-                            task.setURL(new URL("http://40.74.135.223:8080/test/mainServlet?from=0&requestID=3&Username=test&Date="+dateTimeArray[0]+"&Time="+dateTimeArray[1]));
+                            task.setURL(new URL("http://40.74.135.223:8080/test/mainServlet?from=0&requestID=3&Username=test"+"&Date="+dateTimeArray[0]+"&Time="+dateTimeArray[1]));
                         } catch (MalformedURLException e) {
                             e.printStackTrace();
                         }
@@ -248,12 +287,14 @@ public class Activity_GaijuPict extends AppCompatActivity implements View.OnClic
                             e.printStackTrace();
                         }
                         System.out.println(taskText);
-                        if(task.getTaskText().equals("true"))
+                        //削除に成功したら
+                        if(task.getTaskText().equals("true,"))
                             Toast.makeText(Activity_GaijuPict.this,"消去に成功しました",Toast.LENGTH_SHORT).show();
                         else
                             Toast.makeText(Activity_GaijuPict.this,"消去に失敗しました",Toast.LENGTH_SHORT).show();
                     }
                 });
+                //キャンセルを押したら
                 alertDialog.setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -267,13 +308,14 @@ public class Activity_GaijuPict extends AppCompatActivity implements View.OnClic
         }
     }
 
-    //rootレイアウト(実行は一度のみでよい)
+    //以下レイアウト用メソッド
     public void initLayout(){
         scrollView=new ScrollView(this);
         layout_root=new LinearLayout(this);
         layout_root.setOrientation(layout_root.VERTICAL);
         layout_root.setLayoutParams(new LinearLayout.LayoutParams(MP,MP));
         layout_root.setGravity(Gravity.CENTER);
+        layout_root.setBackgroundColor(Color.rgb(240,230,140));
     }
 
     public void createLayoutPict(){

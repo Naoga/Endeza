@@ -43,7 +43,7 @@ public class ConfActivity extends AppCompatActivity implements View.OnClickListe
     private Switch mTb_Notice;
     private Switch mTb_Save;
     //トグルスイッチ用フラグ
-    boolean tgsw_flagnotice=true;
+    boolean tgsw_flagnotice;
     boolean tgsw_flagsave;
     //ユーザ名登録用フィールド
     String strUsr,strUsrtmp,pictTmp;
@@ -54,6 +54,7 @@ public class ConfActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //レイアウトファイルを貼付
         setContentView(R.layout.activity_conf);
         //遷移元からのインテントを取得
         Intent intent=getIntent();
@@ -64,26 +65,26 @@ public class ConfActivity extends AppCompatActivity implements View.OnClickListe
         //ユーザ名を取得
         strUsr=intent.getStringExtra("strUsr");
 
-        routinHttpConFlag=intent.getIntExtra("routinHttpConFlag",routinHttpConFlag);
+        //routinHttpConFlag=intent.getIntExtra("routinHttpConFlag",routinHttpConFlag);
         pictTmp=intent.getStringExtra("pictTmp");
 
         //各メンバ変数を各ウィジェット用にキャスト
         mBut_TopFromConf=(BootstrapButton) findViewById(R.id.but_topfromconf);
-        mNetowrk_Conf=(Button)findViewById(R.id.network_conf);
+        //mNetowrk_Conf=(Button)findViewById(R.id.network_conf);
         mPict_Delete=(Button)findViewById(R.id.pict_delete);
         mUser_Conf=(Button)findViewById(R.id.user_conf);
         mTb_Notice=(Switch) findViewById(R.id.tb_notice);
-        mTb_Save=(Switch)findViewById(R.id.tb_save);
+        //mTb_Save=(Switch)findViewById(R.id.tb_save);
 
         //OnClick()のリスナに設定
         mBut_TopFromConf.setOnClickListener(this);
-        mNetowrk_Conf.setOnClickListener(this);
+        //mNetowrk_Conf.setOnClickListener(this);
         mPict_Delete.setOnClickListener(this);
         mUser_Conf.setOnClickListener(this);
 
         //onCheckedChangeListner()のリスナに設定
         mTb_Notice.setOnCheckedChangeListener(this);
-        mTb_Save.setOnCheckedChangeListener(this);
+        //mTb_Save.setOnCheckedChangeListener(this);
 
         //通知がオフなら
         if(!tgsw_flagnotice){
@@ -91,10 +92,10 @@ public class ConfActivity extends AppCompatActivity implements View.OnClickListe
             mTb_Notice.setChecked(false);
         }
         //省電力設定がオンなら
-        if(tgsw_flagsave){
+        /*if(tgsw_flagsave){
             //トグルスイッチをオンに書き換え
             mTb_Save.setChecked(true);
-        }
+        }*/
 
     }
 
@@ -112,12 +113,12 @@ public class ConfActivity extends AppCompatActivity implements View.OnClickListe
             //画面遷移
             startActivity(intent);
         }
-        else if(v.equals(mNetowrk_Conf)){
+        /*else if(v.equals(mNetowrk_Conf)){
             //ネットワーク設定画面の遷移
             Intent intent=new Intent(this,NetworkActivity.class);
             intent.putExtra("strUsrtn",strUsr);
             startActivity(intent);
-        }
+        }*/
         else if(v.equals(mPict_Delete)) {
             //ダイアログ用フィールドの生成
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(ConfActivity.this);
@@ -135,7 +136,7 @@ public class ConfActivity extends AppCompatActivity implements View.OnClickListe
                     HttpGetTask task = new HttpGetTask();
                     //URLを指定
                     try {
-                        task.setURL(new URL("http://40.74.135.223:8080/test/mainServlet?from=0&requestID=5&Username="+strUsr));
+                        task.setURL(new URL("http://40.74.135.223:8080/test/mainServlet?from=0&requestID=5&Username=test"));
                     } catch (MalformedURLException e) {
                         e.printStackTrace();
                     }
@@ -151,11 +152,17 @@ public class ConfActivity extends AppCompatActivity implements View.OnClickListe
                     }
                     //System.out.println(taskText);
                     String checkRemove=task.getTaskText();
-
-                    //通知バナーの生成
-                    Toast toast = Toast.makeText(ConfActivity.this,"写真を消去しました",Toast.LENGTH_LONG);
-                    //バナーを表示
-                    toast.show();
+                    if(checkRemove.equals("true,")) {
+                        //通知バナーの生成
+                        Toast toast = Toast.makeText(ConfActivity.this, "写真を消去しました", Toast.LENGTH_LONG);
+                        //バナーを表示
+                        toast.show();
+                    }else{
+                        //通知バナーの生成
+                        Toast toast = Toast.makeText(ConfActivity.this, "写真の消去に失敗しました", Toast.LENGTH_LONG);
+                        //バナーを表示
+                        toast.show();
+                    }
                 }
             });
             //以下上記と同様
@@ -171,6 +178,7 @@ public class ConfActivity extends AppCompatActivity implements View.OnClickListe
         }
         else if(v.equals(mUser_Conf)){
             //ユーザ名の設定
+            //一度決めたユーザ名は変更できない
             if(strUsr == null){
                 //レイアウト取得用のフィールドを定義
                 LayoutInflater inflater=(LayoutInflater)this.getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -188,20 +196,23 @@ public class ConfActivity extends AppCompatActivity implements View.OnClickListe
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 //現ユーザ名を退避
-                                //strUsrtmp=strUsr;
+                                strUsrtmp=strUsr;
                                 //ユーザが入力するフォームを生成
                                 EditText userName = (EditText) layout.findViewById(R.id.username);
                                 //String strUser=userName.set
                                 //userName.setText(strUsr);
                                 //ユーザが入力したユーザ名を取得
-                                strUsrtmp = userName.getText().toString();
-                                System.out.println(strUsrtmp);
-                                //正常入力なら(半角かつ空白でない)
-                                if (!isSpaceExist(strUsrtmp)) {
+                                //strUsrtmp = userName.getText().toString();
+                                strUsr=userName.getText().toString();
+                                System.out.println(strUsr);
+                                //正常入力なら(空白でない)
+                                if(!isSpaceExist(strUsr)){
+                                    //サーバへのユーザ登録を行う
+                                    //インスタンス生成*/
                                     HttpGetTask task = new HttpGetTask();
                                     //URLを指定
                                     try {
-                                        task.setURL(new URL("http://40.74.135.223:8080/test/mainServlet?from=0&requestID=4&Username=" + strUsrtmp));
+                                        task.setURL(new URL("http://40.74.135.223:8080/test/mainServlet?from=0&requestID=4&Username="+strUsr));
                                     } catch (MalformedURLException e) {
                                         e.printStackTrace();
                                     }
@@ -216,16 +227,22 @@ public class ConfActivity extends AppCompatActivity implements View.OnClickListe
                                         e.printStackTrace();
                                     }
                                     //System.out.println(taskText);
+                                    //登録結果を取得
                                     String checkUsrName = task.getTaskText();
                                     System.out.println(checkUsrName);
+                                    //成功していたら
                                     if (checkUsrName.equals("true,")) {
-                                        strUsr = strUsrtmp;
-                                        Toast.makeText(ConfActivity.this, "ユーザ名:" + strUsr + "を登録", Toast.LENGTH_SHORT).show();
+                                        //ユーザ名フィールドに書き込む
+                                        /*strUsr = strUsrtmp;
+                                        Toast.makeText(ConfActivity.this, "ユーザ名:" + strUsr + "を登録", Toast.LENGTH_SHORT).show();*/
                                     } else {
-                                        Toast.makeText(ConfActivity.this, "既にそのユーザ名は登録されています。別のユーザ名を入力してください。", Toast.LENGTH_SHORT).show();
+                                        //Toast.makeText(ConfActivity.this, "既にそのユーザ名は登録されています。別のユーザ名を入力してください。", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(ConfActivity.this,"入力されたユーザ名は登録されていません",Toast.LENGTH_SHORT).show();
+                                        strUsr=strUsrtmp;
                                     }
                                 } else {//ユーザ名が空白なら
                                     Toast.makeText(ConfActivity.this, "空白は登録できません", Toast.LENGTH_SHORT).show();
+                                    strUsr=strUsrtmp;
                                     //元のユーザ名を取得
                                     //strUsr=strUsrtmp;
                                 }
@@ -267,6 +284,7 @@ public class ConfActivity extends AppCompatActivity implements View.OnClickListe
         return true;
     }
 
+    //スペースが存在するかを判定するメソッド
     boolean isSpaceExist(String value){
         String[] spaceCheck=new String[value.length()];
         for(int i=0;i<value.length();i++){
@@ -330,13 +348,13 @@ public class ConfActivity extends AppCompatActivity implements View.OnClickListe
                 //通知を切る動作を記述
             }
         }
-        else if(buttonView.getId() == R.id.tb_save){
+        /*else if(buttonView.getId() == R.id.tb_save){
             tgsw_flagsave=isChecked;
             /*Toast toast = Toast.makeText(ConfActivity.this,"clicked tb_save:"+tgsw_flagsave,Toast.LENGTH_LONG);
             toast.show();*/ //デバッグ用のトースト
-            if(isChecked==true){
+            /*if(isChecked==true){
                 //省電力(機能の停止)を行う動作を記述
             }
-        }
+        }*/
     }
 }
