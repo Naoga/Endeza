@@ -8,8 +8,8 @@
     android:orientation="vertical"
     android:gravity="center"
     tools:context=".GaijuActivity"
-    android:weightSum="1"
-    android:background="#f0e68c">
+    android:weightSum="1">
+    <!--android:background="#f0e68c"-->
 
     <!--ロゴのレイアウト-->
     <ImageView

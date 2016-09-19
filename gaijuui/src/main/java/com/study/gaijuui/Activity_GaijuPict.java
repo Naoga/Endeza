@@ -232,7 +232,7 @@ public class Activity_GaijuPict extends AppCompatActivity implements View.OnClic
             //インテントを発行
             HttpGetTask task =new HttpGetTask();
             try {
-                task.setURL(new URL("http://40.74.135.223:8080/test/mainServlet?from=0&requestID=1&Username=test"));
+                task.setURL(new URL("http://40.74.135.223:8080/test/mainServlet?from=0&requestID=1&Username="+strUsrtp));
             }catch(MalformedURLException e){
                 e.printStackTrace();
             }
@@ -315,7 +315,7 @@ public class Activity_GaijuPict extends AppCompatActivity implements View.OnClic
         layout_root.setOrientation(layout_root.VERTICAL);
         layout_root.setLayoutParams(new LinearLayout.LayoutParams(MP,MP));
         layout_root.setGravity(Gravity.CENTER);
-        layout_root.setBackgroundColor(Color.rgb(240,230,140));
+        //layout_root.setBackgroundColor(Color.rgb(240,230,140));
     }
 
     public void createLayoutPict(){

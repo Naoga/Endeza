@@ -185,7 +185,7 @@ public class GaijuActivity extends Activity implements View.OnClickListener {
             //URLを指定
             try {
                 //task.setURL(new URL("http://www.drk7.jp/weather/xml/27.xml"));
-                task.setURL(new URL("http://40.74.135.223:8080/test/mainServlet?from=0&requestID=1&Username=test"));
+                task.setURL(new URL("http://40.74.135.223:8080/test/mainServlet?from=0&requestID=1&Username="+userName));
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
@@ -275,7 +275,7 @@ public class GaijuActivity extends Activity implements View.OnClickListener {
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setContentIntent(contentIntent) // PendingIntent
                 .build();
-        //ダイアログの実装
+        //ダイアログの実装(不必要)
         AlertDialog.Builder ab =new AlertDialog.Builder(GaijuActivity.this);
         ab.setTitle("通知");
         ab.setMessage("害獣の出現を確認しました");
@@ -341,7 +341,7 @@ public class GaijuActivity extends Activity implements View.OnClickListener {
             //HttpGetTask task_t = new HttpGetTask();
             //URLを指定
             try {
-                task_t.setURL(new URL("http://40.74.135.223:8080/test/mainServlet?from=0&requestID=0&Username=test"));
+                task_t.setURL(new URL("http://40.74.135.223:8080/test/mainServlet?from=0&requestID=0&Username="+userName));
                 //task_t.setURL(new URL("http://inoshishi.etc64.com/image/inoshishi04.jp"));
             } catch (MalformedURLException e) {
                 e.printStackTrace();

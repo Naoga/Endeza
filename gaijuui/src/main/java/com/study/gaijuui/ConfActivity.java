@@ -136,7 +136,7 @@ public class ConfActivity extends AppCompatActivity implements View.OnClickListe
                     HttpGetTask task = new HttpGetTask();
                     //URLを指定
                     try {
-                        task.setURL(new URL("http://40.74.135.223:8080/test/mainServlet?from=0&requestID=5&Username=test"));
+                        task.setURL(new URL("http://40.74.135.223:8080/test/mainServlet?from=0&requestID=5&Username="+strUsr));
                     } catch (MalformedURLException e) {
                         e.printStackTrace();
                     }
